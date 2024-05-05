@@ -1,17 +1,16 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Properties from "../pages/Properties";
 import Testimonials from "../pages/Testimonials";
 import Messages from "../pages/Messages";
 
 const AppRouter = () => {
   return (
-    <Switch>
-      <Route exact path="/properties" component={Properties} />
-      <Route exact path="/testimonials" component={Testimonials} />
-      <Route exact path="/messages" component={Messages} />
-      <Redirect to="/properties" />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Properties />} />
+      <Route path="/testimonials" element={<Testimonials />} />
+      <Route path="/messages" element={<Messages />} />
+    </Routes>
   );
 };
 
