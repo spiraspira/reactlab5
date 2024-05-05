@@ -1,38 +1,94 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.app {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  
+  header, footer {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+    font-family: Arial, sans-serif;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .hero-section {
+    margin: 20px 0;
+    text-align: center;
+    font-family: "Times New Roman", serif;
+    font-size: 28px;
+    color: #333;
   }
-}
+  
+  .property-list {
+    margin: 20px 0;
+    background-color: #e8f4f8;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .testimonials {
+    margin: 20px 0;
+    background-color: #f9f3e7;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .testimonial {
+    margin-bottom: 10px;
+    font-family: "Courier New", monospace;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .contact-form {
+    margin: 20px 0;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+  }
+  
+  input,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    header, footer {
+      font-size: 14px;
+    }
+  
+    .hero-section {
+      font-size: 24px;
+    }
+  
+    ul {
+      padding-left: 20px;
+    }
+  
+    .testimonial {
+      font-size: 14px;
+    }
+
+    .contact-form {
+        font-size: 14px;
+      }
+  }
