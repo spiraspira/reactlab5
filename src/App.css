@@ -3,6 +3,47 @@
     margin: 0 auto;
     padding: 20px;
   }
+
+  .header {
+    background-color: #f2f2f2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .header-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .header-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .header-link {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .header-link:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 320px) {
+    .header-title {
+      font-size: 20px;
+    }
+  
+    .header-link {
+      margin-right: 0;
+      margin-bottom: 5px;
+    }
+  }
   
   header, footer {
     background-color: #f2f2f2;
