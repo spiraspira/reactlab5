@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button, Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import TestimonialInfo from "./TestimonialInfo";
 import TestimonialForm from "./TestimonialForm";
 import TestimonialEdit from "./TestimonialEdit";
@@ -65,23 +66,21 @@ class TestimonialList extends Component {
 
     return (
       <section className="testimonial-list">
-        <h2>Отзывы</h2>
-        <ul style={{ margin: 0, padding: 0 }}>
+        <Typography variant="h2">Отзывы</Typography>
+        <List style={{ margin: 0, padding: 0 }}>
           {testimonials.map((testimonial) => (
-            <li key={testimonial.id} style={{ marginBottom: "10px" }}>
-              <div>
-                <h3>{testimonial.name + " " + testimonial.date}</h3>
-                <button onClick={() => this.handleTestimonialClick(testimonial)}>
-                  View
-                </button>
-                <button onClick={() => this.deleteTestimonial(testimonial)}>
-                  Delete
-                </button>
-                <button onClick={() => this.handleEditClick(testimonial)}>Edit</button>
-              </div>
-            </li>
+            <ListItem key={testimonial.id} style={{ marginBottom: "10px" }}>
+              <ListItemText primary={testimonial.name + " " + testimonial.date} />
+              <Button onClick={() => this.handleTestimonialClick(testimonial)}>
+                View
+              </Button>
+              <Button onClick={() => this.deleteTestimonial(testimonial)}>
+                Delete
+              </Button>
+              <Button onClick={() => this.handleEditClick(testimonial)}>Edit</Button>
+            </ListItem>
           ))}
-        </ul>
+        </List>
         {isModalOpen && (
           <TestimonialInfo testimonial={selectedTestimonial} closeModal={this.closeModal} />
         )}
@@ -92,7 +91,7 @@ class TestimonialList extends Component {
             updateTestimonial={this.updateTestimonial}
           />
         )}
-        <h2>Новый отзыв</h2>
+        <Typography variant="h2">Новый отзыв</Typography>
         <TestimonialForm addTestimonial={this.addTestimonial} />
       </section>
     );

@@ -1,31 +1,32 @@
 import React, { Component } from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@material-ui/core";
 
 class TestimonialEdit extends Component {
-    constructor(props) {
-        super(props);
-      
-        this.state = {
-          name: props.testimonial.name,
-          testimonial: props.testimonial.testimonial,
-          date: props.testimonial.date
-        };
-      }
+  constructor(props) {
+    super(props);
 
-      handleChange = (e) => {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-      };
+    this.state = {
+      name: props.testimonial.name,
+      testimonial: props.testimonial.testimonial,
+      date: props.testimonial.date
+    };
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
 
     const updatedTestimonial = {
-        ...this.props.testimonial,
-        name: this.state.name,
-        testimonial: this.state.testimonial,
-        date: this.state.date
-      };
+      ...this.props.testimonial,
+      name: this.state.name,
+      testimonial: this.state.testimonial,
+      date: this.state.date
+    };
 
     this.props.updateTestimonial(updatedTestimonial);
   };
@@ -34,37 +35,44 @@ class TestimonialEdit extends Component {
     const { testimonial, closeModal } = this.props;
 
     return (
-      <div className="modal-container">
-        <div className="modal-content">
-          <h2>Edit Testimonial</h2>
+      <Dialog open={true} onClose={closeModal}>
+        <DialogTitle>Edit Testimonial</DialogTitle>
+        <DialogContent>
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
+            <TextField
+              label="Name"
               name="name"
               value={this.state.name}
               onChange={this.handleChange}
+              fullWidth
             />
-            <label htmlFor="testimonial">Description:</label>
-            <textarea
-             name="testimonial"
-            value={this.state.testimonial}
-            onChange={this.handleChange}
+            <TextField
+              label="Description"
+              name="testimonial"
+              value={this.state.testimonial}
+              onChange={this.handleChange}
+              fullWidth
+              multiline
+              rows={4}
             />
-            <label htmlFor="date">Date:</label>
-            <input
-              type="text"
+            <TextField
+              label="Date"
               name="date"
               value={this.state.date}
               onChange={this.handleChange}
+              fullWidth
             />
-            <div className="modal-buttons">
-              <button type="submit">Save</button>
-              <button onClick={closeModal}>Cancel</button>
-            </div>
+            <DialogActions>
+              <Button type="submit" color="primary">
+                Save
+              </Button>
+              <Button onClick={closeModal} color="primary">
+                Cancel
+              </Button>
+            </DialogActions>
           </form>
-        </div>
-      </div>
+        </DialogContent>
+      </Dialog>
     );
   }
 }
