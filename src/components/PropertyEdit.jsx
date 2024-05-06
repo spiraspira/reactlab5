@@ -1,31 +1,32 @@
 import React, { Component } from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@material-ui/core";
 
 class PropertyEdit extends Component {
-    constructor(props) {
-        super(props);
-      
-        this.state = {
-          name: props.property.name,
-          description: props.property.description,
-          // Add other fields here based on your property data structure
-        };
-      }
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      name: props.property.name,
+      description: props.property.description,
+      // Add other fields here based on your property data structure
+    };
+  }
 
-      handleChange = (e) => {
-        this.setState({
-          [e.target.name]: e.target.value
-        });
-      };
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
 
     const updatedProperty = {
-        ...this.props.property,
-        name: this.state.name,
-        description: this.state.description,
-        // Add other fields here based on your property data structure
-      };
+      ...this.props.property,
+      name: this.state.name,
+      description: this.state.description,
+      // Add other fields here based on your property data structure
+    };
 
     // Call the parent component's updateProperty function
     this.props.updateProperty(updatedProperty);
@@ -35,30 +36,39 @@ class PropertyEdit extends Component {
     const { property, closeModal } = this.props;
 
     return (
-      <div className="modal-container">
-        <div className="modal-content">
-          <h2>Edit Property</h2>
+      <Dialog open={true} onClose={closeModal}>
+        <DialogTitle>Edit Property</DialogTitle>
+        <DialogContent>
           <form onSubmit={this.handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
+            <TextField
+              label="Name"
               name="name"
               value={this.state.name}
               onChange={this.handleChange}
+              fullWidth
+              margin="normal"
             />
-            <label htmlFor="description">Description:</label>
-<textarea
-  name="description"
-  value={this.state.description}
-  onChange={this.handleChange}
-/>
-            <div className="modal-buttons">
-              <button type="submit">Save</button>
-              <button onClick={closeModal}>Cancel</button>
-            </div>
+            <TextField
+              label="Description"
+              name="description"
+              value={this.state.description}
+              onChange={this.handleChange}
+              fullWidth
+              multiline
+              rows={4}
+              margin="normal"
+            />
           </form>
-        </div>
-      </div>
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit" onClick={this.handleSubmit} color="primary">
+            Save
+          </Button>
+          <Button onClick={closeModal} color="secondary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }

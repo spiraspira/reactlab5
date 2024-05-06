@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Typography, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import PropertyInfo from "./PropertyInfo";
 import PropertyForm from "./PropertyForm";
 import PropertyEdit from "./PropertyEdit";
@@ -65,23 +66,23 @@ class PropertyList extends Component {
 
     return (
       <section className="property-list">
-        <h2>Доступные объекты недвижимости</h2>
-        <ul style={{ margin: 0, padding: 0 }}>
+        <Typography variant="h2">Доступные объекты недвижимости</Typography>
+        <List>
           {properties.map((property) => (
-            <li key={property.id} style={{ marginBottom: "10px" }}>
-              <div>
-                <h3>{property.name}</h3>
-                <button onClick={() => this.handlePropertyClick(property)}>
-                  View
-                </button>
-                <button onClick={() => this.deleteProperty(property)}>
-                  Delete
-                </button>
-                <button onClick={() => this.handleEditClick(property)}>Edit</button>
-              </div>
-            </li>
+            <ListItem key={property.id} sx={{ marginBottom: "10px" }}>
+              <ListItemText primary={property.name} />
+              <Button variant="outlined" onClick={() => this.handlePropertyClick(property)}>
+                View
+              </Button>
+              <Button variant="outlined" onClick={() => this.deleteProperty(property)}>
+                Delete
+              </Button>
+              <Button variant="outlined" onClick={() => this.handleEditClick(property)}>
+                Edit
+              </Button>
+            </ListItem>
           ))}
-        </ul>
+        </List>
         {isModalOpen && (
           <PropertyInfo property={selectedProperty} closeModal={this.closeModal} />
         )}
@@ -92,7 +93,7 @@ class PropertyList extends Component {
             updateProperty={this.updateProperty}
           />
         )}
-        <h2>Добавить новый объект недвижимости</h2>
+        <Typography variant="h2">Добавить новый объект недвижимости</Typography>
         <PropertyForm addProperty={this.addProperty} />
       </section>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { TextField, Button } from "@material-ui/core";
 
 class PropertyForm extends Component {
   constructor(props) {
@@ -42,9 +43,8 @@ class PropertyForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
+          <TextField
+            label="Name"
             id="name"
             name="name"
             value={name}
@@ -53,16 +53,20 @@ class PropertyForm extends Component {
           />
         </div>
         <div>
-          <label htmlFor="description">Description:</label>
-          <textarea
+          <TextField
+            label="Description"
             id="description"
             name="description"
             value={description}
             onChange={this.handleInputChange}
             required
+            multiline
+            rows={4}
           />
         </div>
-        <button type="submit">Add Property</button>
+        <Button type="submit" variant="contained" color="primary">
+          Add Property
+        </Button>
       </form>
     );
   }
