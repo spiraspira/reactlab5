@@ -53,6 +53,12 @@ class PropertyList extends Component {
     }));
   };
 
+  addProperty = (newProperty) => {
+    this.setState((prevState) => ({
+      properties: [...prevState.properties, newProperty]
+    }));
+  };
+
   render() {
     const { properties } = this.state;
     const { selectedProperty, isModalOpen, isEditModalOpen } = this.state;
