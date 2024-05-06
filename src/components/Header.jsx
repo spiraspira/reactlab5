@@ -1,19 +1,52 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { AppBar, Toolbar, Typography, Link, makeStyles } from "@material-ui/core";
+import { Link as RouterLink } from "react-router-dom";
 
-class Header extends Component {
-  render() {
-    return (
-      <header className="header">
-        <h1 className="header-title">Агентство недвижимости</h1>
-        <nav className="header-nav">
-          <Link className="header-link" to="/">Недвижимость</Link>
-          <Link className="header-link" to="/testimonials">Отзывы</Link>
-          <Link className="header-link" to="/messages">Обратная связь</Link>
+const useStyles = makeStyles((theme) => ({
+  header: {
+    flexDirection: "column",
+  },
+  headerLink: {
+    color: "#ffffff",
+    padding: theme.spacing(1),
+  },
+}));
+
+function Header() {
+  const classes = useStyles();
+
+  return (
+    <AppBar position="static">
+      <Toolbar className={classes.header}>
+        <Typography variant="h6" component="h1" style={{ color: "#ffffff" }}>
+          Агентство недвижимости
+        </Typography>
+        <nav>
+          <Link
+            component={RouterLink}
+            to="/"
+            className={classes.headerLink}
+          >
+            Недвижимость
+          </Link>
+          <Link
+            component={RouterLink}
+            to="/testimonials"
+            className={classes.headerLink}
+          >
+            Отзывы
+          </Link>
+          <Link
+            component={RouterLink}
+            to="/messages"
+            className={classes.headerLink}
+          >
+            Обратная связь
+          </Link>
         </nav>
-      </header>
-    );
-  }
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default Header;
