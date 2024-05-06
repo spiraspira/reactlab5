@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { TextField, Button } from "@material-ui/core";
 
 class MessageForm extends Component {
   constructor(props) {
@@ -48,8 +49,8 @@ class MessageForm extends Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div>
-          <label htmlFor="name">Name:</label>
-          <input
+          <TextField
+            label="Name"
             type="text"
             id="name"
             name="name"
@@ -59,8 +60,8 @@ class MessageForm extends Component {
           />
         </div>
         <div>
-          <label htmlFor="email">Email:</label>
-          <input
+          <TextField
+            label="Email"
             type="text"
             id="email"
             name="email"
@@ -70,8 +71,10 @@ class MessageForm extends Component {
           />
         </div>
         <div>
-          <label htmlFor="message">Description:</label>
-          <textarea
+          <TextField
+            label="Description"
+            multiline
+            rows={4}
             id="message"
             name="message"
             value={message}
@@ -80,8 +83,8 @@ class MessageForm extends Component {
           />
         </div>
         <div>
-          <label htmlFor="date">Date:</label>
-          <input
+          <TextField
+            label="Date"
             type="text"
             id="date"
             name="date"
@@ -90,7 +93,9 @@ class MessageForm extends Component {
             required
           />
         </div>
-        <button type="submit">Add Message</button>
+        <Button type="submit" variant="contained" color="primary">
+          Add Message
+        </Button>
       </form>
     );
   }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Typography, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import MessageInfo from "./MessageInfo";
 import MessageForm from "./MessageForm";
 import MessageEdit from "./MessageEdit";
@@ -65,23 +66,21 @@ class MessageList extends Component {
 
     return (
       <section className="message-list">
-        <h2>Сообщения</h2>
-        <ul style={{ margin: 0, padding: 0 }}>
+        <Typography variant="h2">Сообщения</Typography>
+        <List style={{ margin: 0, padding: 0 }}>
           {messages.map((message) => (
-            <li key={message.id} style={{ marginBottom: "10px" }}>
-              <div>
-                <h3>{message.name + " " + message.date}</h3>
-                <button onClick={() => this.handleMessageClick(message)}>
-                  View
-                </button>
-                <button onClick={() => this.deleteMessage(message)}>
-                  Delete
-                </button>
-                <button onClick={() => this.handleEditClick(message)}>Edit</button>
-              </div>
-            </li>
+            <ListItem key={message.id} style={{ marginBottom: "10px" }}>
+              <ListItemText primary={message.name + " " + message.date} />
+              <Button onClick={() => this.handleMessageClick(message)}>
+                View
+              </Button>
+              <Button onClick={() => this.deleteMessage(message)}>
+                Delete
+              </Button>
+              <Button onClick={() => this.handleEditClick(message)}>Edit</Button>
+            </ListItem>
           ))}
-        </ul>
+        </List>
         {isModalOpen && (
           <MessageInfo message={selectedMessage} closeModal={this.closeModal} />
         )}
@@ -92,7 +91,7 @@ class MessageList extends Component {
             updateMessage={this.updateMessage}
           />
         )}
-        <h2>Новое сообщение</h2>
+        <Typography variant="h2">Новое сообщение</Typography>
         <MessageForm addMessage={this.addMessage} />
       </section>
     );

@@ -1,18 +1,21 @@
 import React from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@material-ui/core";
 
 const MessageInfo = ({ message, closeModal }) => {
   return (
-    <div className="modal-container">
-      <div className="modal-content">
-        <h3>{message.name}</h3>
-        <p>{message.email}</p>
-        <p>{message.message}</p>
-        <p>{message.date}</p>
-        <button className="modal-close" onClick={closeModal}>
+    <Dialog open={true} onClose={closeModal}>
+      <DialogTitle>{message.name}</DialogTitle>
+      <DialogContent>
+        <Typography>{message.email}</Typography>
+        <Typography>{message.message}</Typography>
+        <Typography>{message.date}</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeModal} color="primary">
           Close
-        </button>
-      </div>
-    </div>
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
