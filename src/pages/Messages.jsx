@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import MessageList from "../components/MessageList";
+import messagesData from "../data/messages.json";
 
 const Messages = () => {
-  return <div>Hello</div>;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    setMessages(messagesData);
+  }, []);
+
+  return <MessageList Messages={messages} />;
 };
 
 export default Messages;
