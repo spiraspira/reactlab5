@@ -29,7 +29,7 @@ const PropertyList = () => {
 
   const updateProperty = (updatedProperty) => {
     setProperties((prevState) =>
-      prevState.properties.map((property) =>
+      prevState.map((property) =>
         property.id === updatedProperty.id ? updatedProperty : property
       )
     );
@@ -38,17 +38,24 @@ const PropertyList = () => {
 
   const deleteProperty = (property) => {
     setProperties((prevState) =>
-      prevState.properties.filter((item) => item.id !== property.id)
+      prevState.filter((item) => item.id !== property.id)
     );
   };
 
   const addProperty = (newProperty) => {
-    setProperties((prevState) => [...prevState.properties, newProperty]);
+    setProperties((prevState) => [...prevState, newProperty]);
+  };
+
+  const sortPropertiesByName = () => {
+    setProperties([...properties].sort((a, b) => a.name.localeCompare(b.name)));
   };
 
   return (
     <section className="property-list">
       <Typography variant="h2">Доступные объекты недвижимости</Typography>
+      <Button variant="outlined" onClick={sortPropertiesByName}>
+        Sort by Name (Ascending)
+      </Button>
       <List>
         {properties.map((property) => (
           <ListItem key={property.id} sx={{ marginBottom: "10px" }}>

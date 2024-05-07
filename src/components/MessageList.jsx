@@ -46,9 +46,16 @@ const MessageList = () => {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
   };
 
+  const sortMessagesByDate = () => {
+    setMessages((prevMessages) =>
+      [...prevMessages].sort((a, b) => new Date(a.date) - new Date(b.date))
+    );
+  };
+
   return (
     <section className="message-list">
       <Typography variant="h2">Сообщения</Typography>
+      <Button onClick={sortMessagesByDate}>Sort by Date</Button>
       <List style={{ margin: 0, padding: 0 }}>
         {messages.map((message) => (
           <ListItem key={message.id} style={{ marginBottom: "10px" }}>

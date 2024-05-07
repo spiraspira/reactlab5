@@ -46,9 +46,16 @@ const TestimonialList = () => {
     setTestimonials((prevTestimonials) => [...prevTestimonials, newTestimonial]);
   };
 
+  const sortTestimonialsByDateAsc = () => {
+    setTestimonials([...testimonials].sort((a, b) => new Date(a.date) - new Date(b.date)));
+  };
+
   return (
     <section className="testimonial-list">
       <Typography variant="h2">Отзывы</Typography>
+      <Button variant="outlined" onClick={sortTestimonialsByDateAsc}>
+        Sort by Date (Ascending)
+      </Button>
       <List style={{ margin: 0, padding: 0 }}>
         {testimonials.map((testimonial) => (
           <ListItem key={testimonial.id} style={{ marginBottom: "10px" }}>
