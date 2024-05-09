@@ -1,15 +1,26 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { Button, Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import TestimonialInfo from "./TestimonialInfo";
 import TestimonialForm from "./TestimonialForm";
 import TestimonialEdit from "./TestimonialEdit";
-import testimonialsData from "../data/testimonials.json";
+import {
+  addTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+  sortTestimonialsByDateAsc
+} from "../actions/testimonialActions";
 
-const TestimonialList = () => {
+const TestimonialList = ({
+  testimonials,
+  addTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+  sortTestimonialsByDateAsc
+}) => {
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [testimonials, setTestimonials] = useState(testimonialsData);
 
   const handleTestimonialClick = (testimonial) => {
     setSelectedTestimonial(testimonial);
@@ -27,41 +38,34 @@ const TestimonialList = () => {
     setIsEditModalOpen(false);
   };
 
-  const updateTestimonial = (updatedTestimonial) => {
-    setTestimonials((prevTestimonials) =>
-      prevTestimonials.map((testimonial) =>
-        testimonial.id === updatedTestimonial.id ? updatedTestimonial : testimonial
-      )
-    );
-    setIsEditModalOpen(false);
+  const handleAddTestimonial = (testimonial) => {
+    addTestimonial(testimonial);
   };
 
-  const deleteTestimonial = (testimonial) => {
-    setTestimonials((prevTestimonials) =>
-      prevTestimonials.filter((item) => item.id !== testimonial.id)
-    );
+  const handleUpdateTestimonial = (testimonial) => {
+    updateTestimonial(testimonial);
   };
 
-  const addTestimonial = (newTestimonial) => {
-    setTestimonials((prevTestimonials) => [...prevTestimonials, newTestimonial]);
+  const handleDeleteTestimonial = (testimonial) => {
+    deleteTestimonial(testimonial);
   };
 
-  const sortTestimonialsByDateAsc = () => {
-    setTestimonials([...testimonials].sort((a, b) => new Date(a.date) - new Date(b.date)));
+  const handleSortTestimonialsByDateAsc = () => {
+    sortTestimonialsByDateAsc();
   };
 
   return (
     <section className="testimonial-list">
       <Typography variant="h2">Отзывы</Typography>
-      <Button variant="outlined" onClick={sortTestimonialsByDateAsc}>
+      <Button variant="outlined" onClick={handleSortTestimonialsByDateAsc}>
         Sort by Date (Ascending)
       </Button>
       <List style={{ margin: 0, padding: 0 }}>
-        {testimonials.map((testimonial) => (
+        {testimonials.testimonials.map((testimonial) => (
           <ListItem key={testimonial.id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={testimonial.name + " " + testimonial.date} />
             <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
-            <Button onClick={() => deleteTestimonial(testimonial)}>Delete</Button>
+            <Button onClick={() => handleDeleteTestimonial(testimonial)}>Delete</Button>
             <Button onClick={() => handleEditClick(testimonial)}>Edit</Button>
           </ListItem>
         ))}
@@ -73,13 +77,22 @@ const TestimonialList = () => {
         <TestimonialEdit
           testimonial={selectedTestimonial}
           closeModal={closeModal}
-          updateTestimonial={updateTestimonial}
+          updateTestimonial={handleUpdateTestimonial}
         />
       )}
       <Typography variant="h2">Новый отзыв</Typography>
-      <TestimonialForm addTestimonial={addTestimonial} />
+      <TestimonialForm addTestimonial={handleAddTestimonial} />
     </section>
   );
 };
 
-export default TestimonialList;
+const mapStateToProps = (state) => ({
+  testimonials: state.testimonials
+});
+
+export default connect(mapStateToProps, {
+  addTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+  sortTestimonialsByDateAsc
+})(TestimonialList);

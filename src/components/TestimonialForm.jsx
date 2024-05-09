@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { TextField, Button } from "@material-ui/core";
+import { addTestimonial } from "../actions/testimonialActions";
 
 const TestimonialForm = ({ addTestimonial }) => {
   const [name, setName] = useState("");
@@ -75,4 +77,4 @@ const TestimonialForm = ({ addTestimonial }) => {
   );
 };
 
-export default TestimonialForm;
+export default connect(null, { addTestimonial })(TestimonialForm);

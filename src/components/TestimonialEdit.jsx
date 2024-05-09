@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField
+} from "@material-ui/core";
+import { updateTestimonial } from "../actions/testimonialActions";
 
 const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
   const [name, setName] = useState(testimonial.name);
@@ -72,4 +81,4 @@ const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
   );
 };
 
-export default TestimonialEdit;
+export default connect(null, { updateTestimonial })(TestimonialEdit);
