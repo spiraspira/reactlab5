@@ -1,9 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+// Подключение маршрутов
+const messagesRouter = require('./routes/messages');
+const testimonialsRouter = require('./routes/testimonials');
+const propertiesRouter = require('./routes/properties');
+
+// Использование маршрутов
+app.use('/messages', messagesRouter);
+app.use('/testimonials', testimonialsRouter);
+app.use('/properties', propertiesRouter);
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');

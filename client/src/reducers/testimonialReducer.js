@@ -1,11 +1,16 @@
-import testimonialsData from "../data/testimonials.json";
+import axios from 'axios';
 
 const initialState = {
-  testimonials: testimonialsData
+  testimonials: []
 };
 
 const testimonialReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_TESTIMONIALS':
+      return {
+        ...state,
+        testimonials: action.payload
+      };
     case 'ADD_TESTIMONIAL':
       return {
         ...state,
@@ -33,6 +38,18 @@ const testimonialReducer = (state = initialState, action) => {
     default:
       return state;
   }
+};
+
+// Асинхронное действие для получения данных с сервера
+export const fetchTestimonials = () => {
+  return async dispatch => {
+    try {
+      const response = await axios.get('/testimonials'); // Замените URL на ваш сервер
+      dispatch({ type: 'SET_TESTIMONIALS', payload: response.data });
+    } catch (error) {
+      console.error('Ошибка при получении данных с сервера:', error);
+    }
+  };
 };
 
 export default testimonialReducer;

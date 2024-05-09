@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Typography, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import MessageInfo from "./MessageInfo";
@@ -8,7 +8,8 @@ import {
   addMessage,
   updateMessage,
   deleteMessage,
-  sortMessagesByDateAsc
+  sortMessagesByDateAsc,
+  fetchMessages
 } from "../actions/messageActions";
 
 const MessageList = ({
@@ -16,11 +17,16 @@ const MessageList = ({
   addMessage,
   updateMessage,
   deleteMessage,
-  sortMessagesByDateAsc
+  sortMessagesByDateAsc,
+  fetchMessages
 }) => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   const handleMessageClick = (message) => {
     setSelectedMessage(message);
@@ -57,14 +63,14 @@ const MessageList = ({
   return (
     <section className="message-list">
       <Typography variant="h2">Сообщения</Typography>
-      <Button onClick={handleSortMessagesByDate}>Sort by Date</Button>
+      <Button onClick={handleSortMessagesByDate}>Сортировать по дате</Button>
       <List style={{ margin: 0, padding: 0 }}>
         {messages.messages.map((message) => (
           <ListItem key={message.id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={message.name + " " + message.date} />
-            <Button onClick={() => handleMessageClick(message)}>View</Button>
-            <Button onClick={() => handleDeleteMessage(message)}>Delete</Button>
-            <Button onClick={() => handleEditClick(message)}>Edit</Button>
+            <Button onClick={() => handleMessageClick(message)}>Просмотр</Button>
+            <Button onClick={() => handleDeleteMessage(message)}>Удалить</Button>
+            <Button onClick={() => handleEditClick(message)}>Редактировать</Button>
           </ListItem>
         ))}
       </List>
@@ -92,5 +98,6 @@ export default connect(mapStateToProps, {
   addMessage,
   updateMessage,
   deleteMessage,
-  sortMessagesByDateAsc
+  sortMessagesByDateAsc,
+  fetchMessages
 })(MessageList);

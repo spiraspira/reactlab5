@@ -1,7 +1,6 @@
-import messagesData from "../data/messages.json";
-
 const initialState = {
-  messages: messagesData
+  messages: [],
+  error: null
 };
 
 const messageReducer = (state = initialState, action) => {
@@ -29,6 +28,17 @@ const messageReducer = (state = initialState, action) => {
       return {
         ...state,
         messages: [...state.messages].sort((a, b) => new Date(a.date) - new Date(b.date))
+      };
+    case 'FETCH_MESSAGES_SUCCESS':
+      return {
+        ...state,
+        messages: action.payload,
+        error: null
+      };
+    case 'FETCH_MESSAGES_FAILURE':
+      return {
+        ...state,
+        error: action.payload
       };
     default:
       return state;
