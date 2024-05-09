@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import {Button} from "@material-ui/core";
+import { connect } from "react-redux";
+import { TextField, Button } from "@material-ui/core";
+import { addProperty } from "../actions/propertyActions";
 
-const PropertyForm = (props) => {
+const PropertyForm = ({ addProperty }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -23,7 +25,7 @@ const PropertyForm = (props) => {
       description: description,
     };
 
-    props.addProperty(newProperty);
+    addProperty(newProperty);
 
     setName("");
     setDescription("");
@@ -32,9 +34,8 @@ const PropertyForm = (props) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name">Name:</label>
-        <input
-          type="text"
+        <TextField
+          label="Name"
           id="name"
           name="name"
           value={name}
@@ -43,18 +44,22 @@ const PropertyForm = (props) => {
         />
       </div>
       <div>
-        <label htmlFor="description">Description:</label>
-        <textarea
+        <TextField
+          label="Description"
           id="description"
           name="description"
           value={description}
           onChange={handleInputChange}
           required
+          multiline
+          rows={4}
         />
       </div>
-      <Button type="submit" variant="contained" color="primary">Add Property</Button>
+      <Button type="submit" variant="contained" color="primary">
+        Add Property
+      </Button>
     </form>
   );
 };
 
-export default PropertyForm;
+export default connect(null, { addProperty })(PropertyForm);

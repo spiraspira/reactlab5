@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField
+} from "@material-ui/core";
+import { updateProperty } from "../actions/propertyActions";
 
-const PropertyEdit = (props) => {
-  const [name, setName] = useState(props.property.name);
-  const [description, setDescription] = useState(props.property.description);
+const PropertyEdit = ({ property, closeModal, updateProperty }) => {
+  const [name, setName] = useState(property.name);
+  const [description, setDescription] = useState(property.description);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,15 +27,13 @@ const PropertyEdit = (props) => {
     e.preventDefault();
 
     const updatedProperty = {
-      ...props.property,
+      ...property,
       name: name,
       description: description,
     };
 
-    props.updateProperty(updatedProperty);
+    updateProperty(updatedProperty);
   };
-
-  const { property, closeModal } = props;
 
   return (
     <Dialog open={true} onClose={closeModal}>
@@ -51,18 +58,18 @@ const PropertyEdit = (props) => {
             rows={4}
             margin="normal"
           />
+          <DialogActions>
+            <Button type="submit" color="primary">
+              Save
+            </Button>
+            <Button onClick={closeModal} color="secondary">
+              Cancel
+            </Button>
+          </DialogActions>
         </form>
       </DialogContent>
-      <DialogActions>
-        <Button type="submit" onClick={handleSubmit} color="primary">
-          Save
-        </Button>
-        <Button onClick={closeModal} color="secondary">
-          Cancel
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
 
-export default PropertyEdit;
+export default connect(null, { updateProperty })(PropertyEdit);

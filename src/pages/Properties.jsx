@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropertyList from "../components/PropertyList";
-import propertiesData from "../data/properties.json";
 
 const Properties = () => {
-  const [properties, setProperties] = useState([]);
-
-  useEffect(() => {
-    setProperties(propertiesData);
-  }, []);
-
-  return <PropertyList properties={properties} />;
+  return <PropertyList/>;
 };
 
 export default Properties;

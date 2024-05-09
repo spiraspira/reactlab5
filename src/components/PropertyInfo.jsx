@@ -3,15 +3,17 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography }
 
 const PropertyInfo = ({ property, closeModal }) => {
   return (
-    <div className="modal-container">
-      <div className="modal-content">
-        <h3>{property.name}</h3>
-        <p>{property.description}</p>
-        <Button onClick={closeModal} variant = "contained" color="primary">
-          Close
+    <Dialog open={true} onClose={closeModal}>
+      <DialogTitle>{property.name}</DialogTitle>
+      <DialogContent>
+        <Typography>{property.description}</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={closeModal} color="primary">
+          Закрыть
         </Button>
-      </div>
-    </div>
+      </DialogActions>
+    </Dialog>
   );
 };
 

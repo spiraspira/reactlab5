@@ -1,15 +1,26 @@
 import React, { useState } from "react";
-import { Typography, List, ListItem, ListItemText, Button } from "@material-ui/core";
+import { connect } from "react-redux";
+import { Button, Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import PropertyInfo from "./PropertyInfo";
 import PropertyForm from "./PropertyForm";
 import PropertyEdit from "./PropertyEdit";
-import propertiesData from "../data/properties.json";
+import {
+  addProperty,
+  updateProperty,
+  deleteProperty,
+  sortPropertiesByNameAsc
+} from "../actions/propertyActions";
 
-const PropertyList = () => {
+const PropertyList = ({
+  properties,
+  addProperty,
+  updateProperty,
+  deleteProperty,
+  sortPropertiesByNameAsc
+}) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [properties, setProperties] = useState(propertiesData);
 
   const handlePropertyClick = (property) => {
     setSelectedProperty(property);
@@ -27,59 +38,65 @@ const PropertyList = () => {
     setIsEditModalOpen(false);
   };
 
-  const updateProperty = (updatedProperty) => {
-    setProperties((prevState) =>
-      prevState.map((property) =>
-        property.id === updatedProperty.id ? updatedProperty : property
-      )
-    );
-    setIsEditModalOpen(false);
+  const handleAddProperty = (property) => {
+    addProperty(property);
   };
 
-  const deleteProperty = (property) => {
-    setProperties((prevState) =>
-      prevState.filter((item) => item.id !== property.id)
-    );
+  const handleUpdateProperty = (property) => {
+    updateProperty(property);
   };
 
-  const addProperty = (newProperty) => {
-    setProperties((prevState) => [...prevState, newProperty]);
+  const handleDeleteProperty = (property) => {
+    deleteProperty(property);
   };
 
-  const sortPropertiesByName = () => {
-    setProperties([...properties].sort((a, b) => a.name.localeCompare(b.name)));
+  const handleSortPropertiesByName = () => {
+    sortPropertiesByNameAsc();
   };
 
   return (
     <section className="property-list">
       <Typography variant="h2">Доступные объекты недвижимости</Typography>
-      <Button variant="outlined" onClick={sortPropertiesByName}>
-        Sort by Name (Ascending)
+      <Button variant="outlined" onClick={handleSortPropertiesByName}>
+        Сортировать по названию (по возрастанию)
       </Button>
       <List>
-        {properties.map((property) => (
-          <ListItem key={property.id} sx={{ marginBottom: "10px" }}>
+        {properties.properties.map((property) => (
+          <ListItem key={property.id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={property.name} />
             <Button variant="outlined" onClick={() => handlePropertyClick(property)}>
-              View
+              Просмотр
             </Button>
-            <Button variant="outlined" onClick={() => deleteProperty(property)}>
-              Delete
+            <Button variant="outlined" onClick={() => handleDeleteProperty(property)}>
+              Удалить
             </Button>
             <Button variant="outlined" onClick={() => handleEditClick(property)}>
-              Edit
+              Редактировать
             </Button>
           </ListItem>
         ))}
       </List>
       {isModalOpen && <PropertyInfo property={selectedProperty} closeModal={closeModal} />}
       {isEditModalOpen && (
-        <PropertyEdit property={selectedProperty} closeModal={closeModal} updateProperty={updateProperty} />
+        <PropertyEdit
+          property={selectedProperty}
+          closeModal={closeModal}
+          updateProperty={handleUpdateProperty}
+        />
       )}
       <Typography variant="h2">Добавить новый объект недвижимости</Typography>
-      <PropertyForm addProperty={addProperty} />
+      <PropertyForm addProperty={handleAddProperty} />
     </section>
   );
 };
 
-export default PropertyList;
+const mapStateToProps = (state) => ({
+  properties: state.properties
+});
+
+export default connect(mapStateToProps, {
+  addProperty,
+  updateProperty,
+  deleteProperty,
+  sortPropertiesByNameAsc
+})(PropertyList);
