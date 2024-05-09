@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Button, Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import PropertyInfo from "./PropertyInfo";
@@ -8,7 +8,8 @@ import {
   addProperty,
   updateProperty,
   deleteProperty,
-  sortPropertiesByNameAsc
+  sortPropertiesByNameAsc,
+  fetchProperties
 } from "../actions/propertyActions";
 
 const PropertyList = ({
@@ -16,11 +17,16 @@ const PropertyList = ({
   addProperty,
   updateProperty,
   deleteProperty,
-  sortPropertiesByNameAsc
+  sortPropertiesByNameAsc,
+  fetchProperties
 }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchProperties();
+  }, [fetchProperties]);
 
   const handlePropertyClick = (property) => {
     setSelectedProperty(property);
@@ -98,5 +104,6 @@ export default connect(mapStateToProps, {
   addProperty,
   updateProperty,
   deleteProperty,
-  sortPropertiesByNameAsc
+  sortPropertiesByNameAsc,
+  fetchProperties
 })(PropertyList);
