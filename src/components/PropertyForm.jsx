@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {Button} from "@material-ui/core";
 
 const PropertyForm = (props) => {
   const [name, setName] = useState("");
@@ -51,7 +52,7 @@ const PropertyForm = (props) => {
           required
         />
       </div>
-      <button type="submit">Add Property</button>
+      <Button type="submit" variant="contained" color="primary">Add Property</Button>
     </form>
   );
 };

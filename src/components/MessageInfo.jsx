@@ -11,7 +11,7 @@ const MessageInfo = ({ message, closeModal }) => {
         <Typography>{message.date}</Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeModal} color="primary">
+        <Button onClick={closeModal} variant = "contained" color="primary">
           Close
         </Button>
       </DialogActions>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@material-ui/core";
 
 const PropertyInfo = ({ property, closeModal }) => {
   return (
@@ -6,9 +7,9 @@ const PropertyInfo = ({ property, closeModal }) => {
       <div className="modal-content">
         <h3>{property.name}</h3>
         <p>{property.description}</p>
-        <button className="modal-close" onClick={closeModal}>
+        <Button onClick={closeModal} variant = "contained" color="primary">
           Close
-        </button>
+        </Button>
       </div>
     </div>
   );
