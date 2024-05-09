@@ -1,15 +1,26 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { Typography, List, ListItem, ListItemText, Button } from "@material-ui/core";
 import MessageInfo from "./MessageInfo";
 import MessageForm from "./MessageForm";
 import MessageEdit from "./MessageEdit";
-import messagesData from "../data/messages.json";
+import {
+  addMessage,
+  updateMessage,
+  deleteMessage,
+  sortMessagesByDateAsc
+} from "../actions/messageActions";
 
-const MessageList = () => {
+const MessageList = ({
+  messages,
+  addMessage,
+  updateMessage,
+  deleteMessage,
+  sortMessagesByDateAsc
+}) => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [messages, setMessages] = useState(messagesData);
 
   const handleMessageClick = (message) => {
     setSelectedMessage(message);
@@ -27,41 +38,32 @@ const MessageList = () => {
     setIsEditModalOpen(false);
   };
 
-  const updateMessage = (updatedMessage) => {
-    setMessages((prevMessages) =>
-      prevMessages.map((message) =>
-        message.id === updatedMessage.id ? updatedMessage : message
-      )
-    );
-    setIsEditModalOpen(false);
+  const handleAddMessage = (message) => {
+    addMessage(message);
   };
 
-  const deleteMessage = (message) => {
-    setMessages((prevMessages) =>
-      prevMessages.filter((item) => item.id !== message.id)
-    );
+  const handleUpdateMessage = (message) => {
+    updateMessage(message);
   };
 
-  const addMessage = (newMessage) => {
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  const handleDeleteMessage = (message) => {
+    deleteMessage(message);
   };
 
-  const sortMessagesByDate = () => {
-    setMessages((prevMessages) =>
-      [...prevMessages].sort((a, b) => new Date(a.date) - new Date(b.date))
-    );
+  const handleSortMessagesByDate = () => {
+    sortMessagesByDateAsc();
   };
 
   return (
     <section className="message-list">
       <Typography variant="h2">Сообщения</Typography>
-      <Button onClick={sortMessagesByDate}>Sort by Date</Button>
+      <Button onClick={handleSortMessagesByDate}>Sort by Date</Button>
       <List style={{ margin: 0, padding: 0 }}>
-        {messages.map((message) => (
+        {messages.messages.map((message) => (
           <ListItem key={message.id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={message.name + " " + message.date} />
             <Button onClick={() => handleMessageClick(message)}>View</Button>
-            <Button onClick={() => deleteMessage(message)}>Delete</Button>
+            <Button onClick={() => handleDeleteMessage(message)}>Delete</Button>
             <Button onClick={() => handleEditClick(message)}>Edit</Button>
           </ListItem>
         ))}
@@ -73,13 +75,22 @@ const MessageList = () => {
         <MessageEdit
           message={selectedMessage}
           closeModal={closeModal}
-          updateMessage={updateMessage}
+          updateMessage={handleUpdateMessage}
         />
       )}
       <Typography variant="h2">Новое сообщение</Typography>
-      <MessageForm addMessage={addMessage} />
+      <MessageForm addMessage={handleAddMessage} />
     </section>
   );
 };
 
-export default MessageList;
+const mapStateToProps = (state) => ({
+  messages: state.messages
+});
+
+export default connect(mapStateToProps, {
+  addMessage,
+  updateMessage,
+  deleteMessage,
+  sortMessagesByDateAsc
+})(MessageList);

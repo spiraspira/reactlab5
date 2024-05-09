@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { TextField, Button } from "@material-ui/core";
+import { addMessage } from "../actions/messageActions";
 
 const MessageForm = ({ addMessage }) => {
   const [name, setName] = useState("");
@@ -103,4 +105,4 @@ const MessageForm = ({ addMessage }) => {
   );
 };
 
-export default MessageForm;
+export default connect(null, { addMessage })(MessageForm);

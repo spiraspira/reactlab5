@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField
+} from "@material-ui/core";
+import { updateMessage } from "../actions/messageActions";
 
 const MessageEdit = ({ message, closeModal, updateMessage }) => {
   const [name, setName] = useState(message.name);
@@ -39,6 +48,7 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
     };
 
     updateMessage(updatedMessage);
+    closeModal();
   };
 
   return (
@@ -83,18 +93,18 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
             fullWidth
             margin="normal"
           />
-          <div className="modal-buttons">
-            <Button type="submit" variant="contained" color="primary">
+          <DialogActions>
+            <Button type="submit" color="primary">
               Save
             </Button>
-            <Button onClick={closeModal} variant="contained" color="secondary">
+            <Button onClick={closeModal} color="secondary">
               Cancel
             </Button>
-          </div>
+          </DialogActions>
         </form>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default MessageEdit;
+export default connect(null, { updateMessage })(MessageEdit);
