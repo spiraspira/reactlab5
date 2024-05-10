@@ -1,25 +1,19 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 
 const router = express.Router();
 
+const messagesController = require('../controllers/messagesController');
+
 // GET-маршрут для получения данных Messages
-router.get('/', (req, res) => {
-  // Путь к файлу с данными Messages
-  const filePath = path.join(__dirname, '..', 'data', 'messages.json');
+router.get('/', messagesController.getMessages);
 
-  // Чтение файла с данными Messages
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
+// POST-маршрут для создания нового сообщения
+router.post('/', messagesController.createMessage);
 
-    // Преобразование данных в формат JSON и отправка клиенту
-    const messages = JSON.parse(data);
-    res.json(messages);
-  });
-});
+// PUT-маршрут для обновления данных сообщения
+router.put('/:id', messagesController.updateMessage);
+
+// DELETE-маршрут для удаления сообщения
+router.delete('/:id', messagesController.deleteMessage);
 
 module.exports = router;
