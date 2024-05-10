@@ -34,7 +34,7 @@ const createMessage = (req, res) => {
     // Преобразование данных в формат JSON
     const messages = JSON.parse(data);
 
-    if(newTestimonial == null) {
+    if(newMessage == null) {
         console.log("Entity is null");
 
         return;
@@ -50,7 +50,7 @@ const createMessage = (req, res) => {
         return res.status(500).json({ error: 'Ошибка сервера' });
       }
 
-      res.json({ success: true, id: newMessageId });
+      res.json(newMessage);
     });
   });
 };
@@ -74,7 +74,7 @@ const updateMessage = (req, res) => {
     const messages = JSON.parse(data);
 
     // Поиск сообщения по идентификатору
-    const message = messages.find(m => m.id === messageId);
+    const message = messages.find(m => m.id == messageId);
     if (!message) {
       return res.status(404).json({ error: 'Сообщение не найдено' });
     }
@@ -89,7 +89,7 @@ const updateMessage = (req, res) => {
         return res.status(500).json({ error: 'Ошибка сервера' });
       }
 
-      res.json({ success: true });
+      res.json(updatedMessage);
     });
   });
 };
@@ -127,7 +127,7 @@ const deleteMessage = (req, res) => {
         return res.status(500).json({ error: 'Ошибка сервера' });
       }
 
-      res.json({ success: true });
+      res.json({ id: messageId });
     });
   });
 };

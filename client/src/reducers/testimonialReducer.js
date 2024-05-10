@@ -32,9 +32,7 @@ const testimonialReducer = (state = initialState, action) => {
       case 'SORT_TESTIMONIALS_BY_DATE_ASC':
         return {
           ...state,
-          testimonials: [...state.testimonials].sort((a, b) => {
-            return new Date(a.date) - new Date(b.date);
-          })
+          testimonials: [...state.testimonials].sort((a, b) => new Date(a.date) - new Date(b.date))
         };
       case 'FETCH_TESTIMONIALS_SUCCESS':
         return {

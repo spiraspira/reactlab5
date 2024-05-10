@@ -21,7 +21,7 @@ const messageReducer = (state = initialState, action) => {
       return {
         ...state,
         messages: state.messages.filter(message =>
-          message.id !== action.payload.id
+          message.id != action.payload.id
         )
       };
     case 'SORT_MESSAGES_BY_DATE_ASC':
