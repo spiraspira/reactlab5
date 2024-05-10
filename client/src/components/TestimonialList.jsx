@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Button, Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import TestimonialInfo from "./TestimonialInfo";
@@ -8,7 +8,8 @@ import {
   addTestimonial,
   updateTestimonial,
   deleteTestimonial,
-  sortTestimonialsByDateAsc
+  sortTestimonialsByDateAsc,
+  fetchTestimonials
 } from "../actions/testimonialActions";
 
 const TestimonialList = ({
@@ -16,11 +17,16 @@ const TestimonialList = ({
   addTestimonial,
   updateTestimonial,
   deleteTestimonial,
-  sortTestimonialsByDateAsc
+  sortTestimonialsByDateAsc,
+  fetchTestimonials
 }) => {
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, [fetchTestimonials]);
 
   const handleTestimonialClick = (testimonial) => {
     setSelectedTestimonial(testimonial);
@@ -94,5 +100,6 @@ export default connect(mapStateToProps, {
   addTestimonial,
   updateTestimonial,
   deleteTestimonial,
-  sortTestimonialsByDateAsc
+  sortTestimonialsByDateAsc,
+  fetchTestimonials
 })(TestimonialList);

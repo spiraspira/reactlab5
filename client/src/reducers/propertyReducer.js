@@ -24,11 +24,13 @@ const initialState = {
             property.id !== action.payload.id
           )
         };
-      case 'SORT_PROPERTIES_BY_DATE_ASC':
-        return {
-          ...state,
-          properties: [...state.properties].sort((a, b) => new Date(a.date) - new Date(b.date))
-        };
+        case 'SORT_PROPERTIES_BY_NAME_ASC':
+            return {
+              ...state,
+              properties: state.properties.slice().sort((a, b) =>
+                a.name.localeCompare(b.name)
+              )
+            };
       case 'FETCH_PROPERTIES_SUCCESS':
         return {
           ...state,
