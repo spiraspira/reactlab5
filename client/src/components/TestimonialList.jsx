@@ -60,11 +60,24 @@ const TestimonialList = ({
     sortTestimonialsByDateAsc();
   };
 
+  const handleSaveTestimonials = () => {
+    const testimonialsData = JSON.stringify(testimonials.testimonials);
+    const blob = new Blob([testimonialsData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "testimonials.json";
+    link.click();
+  };
+
   return (
     <section className="testimonial-list">
       <Typography variant="h2">Отзывы</Typography>
       <Button variant="outlined" onClick={handleSortTestimonialsByDateAsc}>
         Sort by Date (Ascending)
+      </Button>
+      <Button variant="outlined" onClick={handleSaveTestimonials}>
+        Save Testimonials
       </Button>
       <List style={{ margin: 0, padding: 0 }}>
         {testimonials.testimonials.map((testimonial) => (

@@ -60,10 +60,22 @@ const MessageList = ({
     sortMessagesByDateAsc();
   };
 
+  const handleDownloadJson = () => {
+    const json = JSON.stringify(messages.messages, null, 2);
+    const element = document.createElement("a");
+    const file = new Blob([json], { type: "application/json" });
+    element.href = URL.createObjectURL(file);
+    element.download = "messages.json";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
+
   return (
     <section className="message-list">
       <Typography variant="h2">Сообщения</Typography>
       <Button onClick={handleSortMessagesByDate}>Сортировать по дате</Button>
+      <Button onClick={handleDownloadJson}>Скачать JSON</Button>
       <List style={{ margin: 0, padding: 0 }}>
         {messages.messages.map((message) => (
           <ListItem key={message.id} style={{ marginBottom: "10px" }}>

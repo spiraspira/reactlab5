@@ -60,11 +60,25 @@ const PropertyList = ({
     sortPropertiesByNameAsc();
   };
 
+  const handleSaveJson = () => {
+    const json = JSON.stringify(properties);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "properties.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <section className="property-list">
       <Typography variant="h2">Доступные объекты недвижимости</Typography>
       <Button variant="outlined" onClick={handleSortPropertiesByName}>
         Сортировать по названию (по возрастанию)
+      </Button>
+      <Button variant="outlined" onClick={handleSaveJson}>
+        Сохранить JSON
       </Button>
       <List>
         {properties.properties.map((property) => (
