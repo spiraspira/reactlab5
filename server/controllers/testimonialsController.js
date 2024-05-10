@@ -19,6 +19,11 @@ const getTestimonials = (req, res) => {
 // POST controller for creating a new testimonial
 const createTestimonial = (req, res) => {
   const newTestimonial = req.body;
+    if(newTestimonial == null) {
+        console.log("Entity is null");
+
+        return;
+    }
 
   const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
   fs.readFile(filePath, 'utf8', (err, data) => {
@@ -29,9 +34,6 @@ const createTestimonial = (req, res) => {
 
     const testimonials = JSON.parse(data);
 
-    const newTestimonialId = generateUniqueId();
-    newTestimonial.id = newTestimonialId;
-
     testimonials.push(newTestimonial);
 
     fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
@@ -40,7 +42,7 @@ const createTestimonial = (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
 
-      res.json({ success: true, id: newTestimonialId });
+      res.json(newTestimonial);
     });
   });
 };
@@ -59,7 +61,7 @@ const updateTestimonial = (req, res) => {
 
     const testimonials = JSON.parse(data);
 
-    const testimonial = testimonials.find(t => t.id === testimonialId);
+    const testimonial = testimonials.find(t => t.id == testimonialId);
     if (!testimonial) {
       return res.status(404).json({ error: 'Testimonial not found' });
     }
@@ -72,7 +74,7 @@ const updateTestimonial = (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
 
-      res.json({ success: true });
+      res.json(updatedTestimonial);
     });
   });
 };
@@ -90,7 +92,7 @@ const deleteTestimonial = (req, res) => {
 
     const testimonials = JSON.parse(data);
 
-    const testimonialIndex = testimonials.findIndex(t => t.id === testimonialId);
+    const testimonialIndex = testimonials.findIndex(t => t.id == testimonialId);
     if (testimonialIndex === -1) {
       return res.status(404).json({ error: 'Testimonial not found' });
     }

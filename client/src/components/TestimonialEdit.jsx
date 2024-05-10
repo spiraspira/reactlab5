@@ -36,6 +36,8 @@ const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
       date: date
     };
 
+    console.log(updatedTestimonial);
+
     updateTestimonial(updatedTestimonial);
   };
 

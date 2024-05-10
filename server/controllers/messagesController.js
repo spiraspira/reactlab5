@@ -34,9 +34,11 @@ const createMessage = (req, res) => {
     // Преобразование данных в формат JSON
     const messages = JSON.parse(data);
 
-    // Генерация уникального идентификатора для нового сообщения
-    const newMessageId = generateUniqueId();
-    newMessage.id = newMessageId;
+    if(newTestimonial == null) {
+        console.log("Entity is null");
+
+        return;
+    }
 
     // Добавление нового сообщения
     messages.push(newMessage);
@@ -110,7 +112,7 @@ const deleteMessage = (req, res) => {
     const messages = JSON.parse(data);
 
     // Поиск сообщения по идентификатору
-    const messageIndex = messages.findIndex(m => m.id === messageId);
+    const messageIndex = messages.findIndex(m => m.id == messageId);
     if (messageIndex === -1) {
       return res.status(404).json({ error: 'Сообщение не найдено' });
     }

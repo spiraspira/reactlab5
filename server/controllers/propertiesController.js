@@ -29,8 +29,11 @@ const createProperty = (req, res) => {
 
     const properties = JSON.parse(data);
 
-    const newPropertyId = generateUniqueId();
-    newProperty.id = newPropertyId;
+    if(newTestimonial == null) {
+        console.log("Entity is null");
+
+        return;
+    }
 
     properties.push(newProperty);
 
@@ -90,7 +93,7 @@ const deleteProperty = (req, res) => {
 
     const properties = JSON.parse(data);
 
-    const propertyIndex = properties.findIndex(p => p.id === propertyId);
+    const propertyIndex = properties.findIndex(p => p.id == propertyId);
     if (propertyIndex === -1) {
       return res.status(404).json({ error: 'Property not found' });
     }
