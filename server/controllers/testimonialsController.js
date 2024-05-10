@@ -1,29 +1,116 @@
 const fs = require('fs');
 const path = require('path');
 
-// Функция для чтения файла с данными Testimonials
-function readTestimonials(callback) {
+// GET controller for retrieving testimonial data
+const getTestimonials = (req, res) => {
+  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
+
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Server error' });
+    }
+
+    const testimonials = JSON.parse(data);
+    res.json(testimonials);
+  });
+};
+
+// POST controller for creating a new testimonial
+const createTestimonial = (req, res) => {
+  const newTestimonial = req.body;
+
   const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       console.error(err);
-      return callback(err, null);
+      return res.status(500).json({ error: 'Server error' });
     }
-    const testimonials = JSON.parse(data);
-    callback(null, testimonials);
-  });
-}
 
-// Обработчик GET-запроса для получения данных Testimonials
-function getTestimonials(req, res) {
-  readTestimonials((err, testimonials) => {
-    if (err) {
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
-    res.json(testimonials);
+    const testimonials = JSON.parse(data);
+
+    const newTestimonialId = generateUniqueId();
+    newTestimonial.id = newTestimonialId;
+
+    testimonials.push(newTestimonial);
+
+    fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Server error' });
+      }
+
+      res.json({ success: true, id: newTestimonialId });
+    });
   });
-}
+};
+
+// PUT controller for updating testimonial data
+const updateTestimonial = (req, res) => {
+  const testimonialId = req.params.id;
+  const updatedTestimonial = req.body;
+
+  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Server error' });
+    }
+
+    const testimonials = JSON.parse(data);
+
+    const testimonial = testimonials.find(t => t.id === testimonialId);
+    if (!testimonial) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+
+    Object.assign(testimonial, updatedTestimonial);
+
+    fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Server error' });
+      }
+
+      res.json({ success: true });
+    });
+  });
+};
+
+// DELETE controller for deleting a testimonial
+const deleteTestimonial = (req, res) => {
+  const testimonialId = req.params.id;
+
+  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Server error' });
+    }
+
+    const testimonials = JSON.parse(data);
+
+    const testimonialIndex = testimonials.findIndex(t => t.id === testimonialId);
+    if (testimonialIndex === -1) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+
+    testimonials.splice(testimonialIndex, 1);
+
+    fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Server error' });
+      }
+
+      res.json({ success: true });
+    });
+  });
+};
 
 module.exports = {
-  getTestimonials
+  getTestimonials,
+  createTestimonial,
+  updateTestimonial,
+  deleteTestimonial
 };

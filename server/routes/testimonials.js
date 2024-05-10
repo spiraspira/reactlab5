@@ -1,25 +1,19 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
 
 const router = express.Router();
 
+const testimonialsController = require('../controllers/testimonialsController');
+
 // GET-маршрут для получения данных Testimonials
-router.get('/', (req, res) => {
-  // Путь к файлу с данными Testimonials
-  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
+router.get('/', testimonialsController.getTestimonials);
 
-  // Чтение файла с данными Testimonials
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
+// POST-маршрут для создания нового сообщения
+router.post('/', testimonialsController.createTestimonial);
 
-    // Преобразование данных в формат JSON и отправка клиенту
-    const testimonials = JSON.parse(data);
-    res.json(testimonials);
-  });
-});
+// PUT-маршрут для обновления данных сообщения
+router.put('/:id', testimonialsController.updateTestimonial);
+
+// DELETE-маршрут для удаления сообщения
+router.delete('/:id', testimonialsController.deleteTestimonial);
 
 module.exports = router;
