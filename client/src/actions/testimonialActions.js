@@ -41,6 +41,7 @@ export const deleteTestimonial = (testimonial) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(`http://localhost:5000/testimonials/${testimonial.id}`);
+
       dispatch({
         type: DELETE_TESTIMONIAL,
         payload: response.data

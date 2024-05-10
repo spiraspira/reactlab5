@@ -105,7 +105,7 @@ const deleteTestimonial = (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
 
-      res.json({ success: true });
+      res.json({id: testimonialId});
     });
   });
 };

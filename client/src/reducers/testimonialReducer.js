@@ -26,7 +26,7 @@ const testimonialReducer = (state = initialState, action) => {
       return {
         ...state,
         testimonials: state.testimonials.filter(testimonial =>
-          testimonial.id !== action.payload.id
+          testimonial.id != action.payload.id
         )
       };
       case 'SORT_TESTIMONIALS_BY_DATE_ASC':

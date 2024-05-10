@@ -21,7 +21,7 @@ const initialState = {
         return {
           ...state,
           properties: state.properties.filter(property =>
-            property.id !== action.payload.id
+            property.id != action.payload.id
           )
         };
         case 'SORT_PROPERTIES_BY_NAME_ASC':

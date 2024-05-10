@@ -29,7 +29,7 @@ const createProperty = (req, res) => {
 
     const properties = JSON.parse(data);
 
-    if(newTestimonial == null) {
+    if(newProperty == null) {
         console.log("Entity is null");
 
         return;
@@ -43,7 +43,7 @@ const createProperty = (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
 
-      res.json({ success: true, id: newPropertyId });
+      res.json(newProperty);
     });
   });
 };
@@ -62,7 +62,7 @@ const updateProperty = (req, res) => {
 
     const properties = JSON.parse(data);
 
-    const property = properties.find(p => p.id === propertyId);
+    const property = properties.find(p => p.id == propertyId);
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }
@@ -75,7 +75,7 @@ const updateProperty = (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
 
-      res.json({ success: true });
+      res.json(updatedProperty);
     });
   });
 };
@@ -106,7 +106,7 @@ const deleteProperty = (req, res) => {
         return res.status(500).json({ error: 'Server error' });
       }
 
-      res.json({ success: true });
+      res.json({ id: propertyId });
     });
   });
 };
