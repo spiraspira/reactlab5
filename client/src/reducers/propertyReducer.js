@@ -14,14 +14,14 @@ const initialState = {
         return {
           ...state,
           properties: state.properties.map(property =>
-            property.id === action.payload.id ? action.payload : property
+            property.Id == action.payload.Id ? action.payload : property
           )
         };
       case 'DELETE_PROPERTY':
         return {
           ...state,
           properties: state.properties.filter(property =>
-            property.id != action.payload.id
+            property.Id != action.payload.Id
           )
         };
         case 'SORT_PROPERTIES_BY_NAME_ASC':

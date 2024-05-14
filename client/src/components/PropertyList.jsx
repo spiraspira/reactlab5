@@ -82,7 +82,7 @@ const PropertyList = ({
       </Button>
       <List>
         {properties.properties.map((property) => (
-          <ListItem key={property.id} style={{ marginBottom: "10px" }}>
+          <ListItem key={property.Id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={property.name} />
             <Button variant="outlined" onClick={() => handlePropertyClick(property)}>
               Просмотр

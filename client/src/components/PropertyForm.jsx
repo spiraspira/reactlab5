@@ -20,7 +20,6 @@ const PropertyForm = ({ addProperty }) => {
     event.preventDefault();
 
     const newProperty = {
-      id: Date.now(),
       name: name,
       description: description,
     };

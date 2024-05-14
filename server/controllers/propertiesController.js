@@ -14,7 +14,11 @@ const getProperties = async (req, res) => {
 // POST controller for creating a new property
 const createProperty = async (req, res) => {
   try {
-    const newProperty = await Property.create(req.body);
+    const { name, description } = req.body;
+    const newProperty = await Property.create({
+      name,
+      description
+    });
     res.json(newProperty);
   } catch (error) {
     console.error(error);
@@ -52,7 +56,7 @@ const deleteProperty = async (req, res) => {
     }
 
     await property.destroy();
-    res.json({ id: propertyId });
+    res.json({ Id: propertyId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
