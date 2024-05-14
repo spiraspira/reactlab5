@@ -13,7 +13,6 @@ import { updateTestimonial } from "../actions/testimonialActions";
 const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
   const [name, setName] = useState(testimonial.name);
   const [testimonialText, setTestimonialText] = useState(testimonial.testimonial);
-  const [date, setDate] = useState(testimonial.date);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,8 +20,6 @@ const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
       setName(value);
     } else if (name === "testimonial") {
       setTestimonialText(value);
-    } else if (name === "date") {
-      setDate(value);
     }
   };
 
@@ -32,8 +29,7 @@ const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
     const updatedTestimonial = {
       ...testimonial,
       name: name,
-      testimonial: testimonialText,
-      date: date
+      testimonial: testimonialText
     };
 
     console.log(updatedTestimonial);
@@ -61,13 +57,6 @@ const TestimonialEdit = ({ testimonial, closeModal, updateTestimonial }) => {
             fullWidth
             multiline
             rows={4}
-          />
-          <TextField
-            label="Date"
-            name="date"
-            value={date}
-            onChange={handleChange}
-            fullWidth
           />
           <DialogActions>
             <Button type="submit" color="primary">

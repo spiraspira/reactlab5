@@ -81,8 +81,8 @@ const TestimonialList = ({
       </Button>
       <List style={{ margin: 0, padding: 0 }}>
         {testimonials.testimonials.map((testimonial) => (
-          <ListItem key={testimonial.id} style={{ marginBottom: "10px" }}>
-            <ListItemText primary={testimonial.name + " " + testimonial.date} />
+          <ListItem key={testimonial.Id} style={{ marginBottom: "10px" }}>
+            <ListItemText primary={testimonial.name + " " + new Date(testimonial.date).toLocaleString()} />
             <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
             <Button onClick={() => handleDeleteTestimonial(testimonial)}>Delete</Button>
             <Button onClick={() => handleEditClick(testimonial)}>Edit</Button>

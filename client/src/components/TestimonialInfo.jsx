@@ -7,7 +7,7 @@ const TestimonialInfo = ({ testimonial, closeModal }) => {
       <DialogTitle>{testimonial.name}</DialogTitle>
       <DialogContent>
         <Typography>{testimonial.testimonial}</Typography>
-        <Typography>{testimonial.date}</Typography>
+        <Typography>{new Date(testimonial.date).toLocaleString()}</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={closeModal} color="primary">

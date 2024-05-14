@@ -6,7 +6,6 @@ import { addTestimonial } from "../actions/testimonialActions";
 const TestimonialForm = ({ addTestimonial }) => {
   const [name, setName] = useState("");
   const [testimonial, setTestimonial] = useState("");
-  const [date, setDate] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -14,8 +13,6 @@ const TestimonialForm = ({ addTestimonial }) => {
       setName(value);
     } else if (name === "testimonial") {
       setTestimonial(value);
-    } else if (name === "date") {
-      setDate(value);
     }
   };
 
@@ -23,17 +20,14 @@ const TestimonialForm = ({ addTestimonial }) => {
     event.preventDefault();
 
     const newTestimonial = {
-      id: Date.now(),
       name: name,
-      testimonial: testimonial,
-      date: date
+      testimonial: testimonial
     };
 
     addTestimonial(newTestimonial);
 
     setName("");
     setTestimonial("");
-    setDate("");
   };
 
   return (
@@ -58,16 +52,6 @@ const TestimonialForm = ({ addTestimonial }) => {
           required
           multiline
           rows={4}
-        />
-      </div>
-      <div>
-        <TextField
-          label="Date"
-          id="date"
-          name="date"
-          value={date}
-          onChange={handleInputChange}
-          required
         />
       </div>
       <Button type="submit" variant="contained" color="primary">

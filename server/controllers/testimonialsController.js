@@ -14,7 +14,12 @@ const getTestimonials = async (req, res) => {
 // POST controller for creating a new testimonial
 const createTestimonial = async (req, res) => {
   try {
-    const newTestimonial = await Testimonial.create(req.body);
+    const { name, testimonial } = req.body;
+    const newTestimonial = await Testimonial.create({
+      name,
+      testimonial,
+      date: new Date()
+    });
     res.json(newTestimonial);
   } catch (error) {
     console.error(error);
@@ -52,7 +57,7 @@ const deleteTestimonial = async (req, res) => {
     }
 
     await testimonial.destroy();
-    res.json({ id: testimonialId });
+    res.json({ Id: testimonialId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
