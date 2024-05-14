@@ -6,7 +6,6 @@ import { addMessage } from "../actions/messageActions";
 const MessageForm = ({ addMessage }) => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
-  const [date, setDate] = useState("");
   const [email, setEmail] = useState("");
 
   const handleInputChange = (event) => {
@@ -17,9 +16,6 @@ const MessageForm = ({ addMessage }) => {
         break;
       case "message":
         setMessage(value);
-        break;
-      case "date":
-        setDate(value);
         break;
       case "email":
         setEmail(value);
@@ -34,10 +30,8 @@ const MessageForm = ({ addMessage }) => {
 
     // Create a new message object
     const newMessage = {
-      id: Date.now(),
       name,
       message,
-      date,
       email
     };
 
@@ -47,7 +41,6 @@ const MessageForm = ({ addMessage }) => {
     // Clear the form inputs
     setName("");
     setMessage("");
-    setDate("");
     setEmail("");
   };
 
@@ -83,17 +76,6 @@ const MessageForm = ({ addMessage }) => {
           id="message"
           name="message"
           value={message}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
-      <div>
-        <TextField
-          label="Date"
-          type="text"
-          id="date"
-          name="date"
-          value={date}
           onChange={handleInputChange}
           required
         />

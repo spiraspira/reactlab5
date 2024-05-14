@@ -77,14 +77,16 @@ const MessageList = ({
       <Button onClick={handleSortMessagesByDate}>Сортировать по дате</Button>
       <Button onClick={handleDownloadJson}>Скачать JSON</Button>
       <List style={{ margin: 0, padding: 0 }}>
-        {messages.messages.map((message) => (
-          <ListItem key={message.id} style={{ marginBottom: "10px" }}>
-            <ListItemText primary={message.name + " " + message.date} />
-            <Button onClick={() => handleMessageClick(message)}>Просмотр</Button>
-            <Button onClick={() => handleDeleteMessage(message)}>Удалить</Button>
-            <Button onClick={() => handleEditClick(message)}>Редактировать</Button>
-          </ListItem>
-        ))}
+      {messages.messages.map((message) => (
+  <ListItem key={message.Id} style={{ marginBottom: "10px" }}>
+    <ListItemText
+      primary={message.name + "\t" + new Date(message.date).toLocaleString()}
+    />
+    <Button onClick={() => handleMessageClick(message)}>Просмотр</Button>
+    <Button onClick={() => handleDeleteMessage(message)}>Удалить</Button>
+    <Button onClick={() => handleEditClick(message)}>Редактировать</Button>
+  </ListItem>
+))}
       </List>
       {isModalOpen && (
         <MessageInfo message={selectedMessage} closeModal={closeModal} />

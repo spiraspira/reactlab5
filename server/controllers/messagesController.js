@@ -14,13 +14,12 @@ const getMessages = async (req, res) => {
 // POST-контроллер для создания нового сообщения
 const createMessage = async (req, res) => {
   try {
-    const { id, name, email, message, attachments } = req.body;
+    const { name, email, message } = req.body;
     const newMessage = await Message.create({
-      id,
       name,
       email,
       message,
-      attachments
+      date: new Date()
     });
     res.json(newMessage);
   } catch (error) {
@@ -59,7 +58,7 @@ const deleteMessage = async (req, res) => {
     }
 
     await message.destroy();
-    res.json({ id: messageId });
+    res.json({ Id: messageId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка сервера' });

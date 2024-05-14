@@ -14,7 +14,6 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
   const [name, setName] = useState(message.name);
   const [email, setEmail] = useState(message.email);
   const [messageText, setMessageText] = useState(message.message);
-  const [date, setDate] = useState(message.date);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,9 +27,6 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
       case "message":
         setMessageText(value);
         break;
-      case "date":
-        setDate(value);
-        break;
       default:
         break;
     }
@@ -43,10 +39,9 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
       ...message,
       name: name,
       message: messageText,
-      date: date,
       email: email
     };
-
+    
     updateMessage(updatedMessage);
     closeModal();
   };
@@ -80,15 +75,6 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
             rows={4}
             name="message"
             value={messageText}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Date"
-            type="text"
-            name="date"
-            value={date}
             onChange={handleChange}
             fullWidth
             margin="normal"

@@ -26,7 +26,7 @@ export const addMessage = (message) => {
 export const updateMessage = (message) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put(`http://localhost:5000/messages/${message.id}`, message);
+      const response = await axios.put(`http://localhost:5000/messages/${message.Id}`, message);
       dispatch({
         type: UPDATE_MESSAGE,
         payload: response.data
@@ -40,7 +40,7 @@ export const updateMessage = (message) => {
 export const deleteMessage = (message) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/messages/${message.id}`);
+      const response = await axios.delete(`http://localhost:5000/messages/${message.Id}`);
       dispatch({
         type: DELETE_MESSAGE,
         payload: response.data

@@ -8,7 +8,7 @@ const MessageInfo = ({ message, closeModal }) => {
       <DialogContent>
         <Typography>{message.email}</Typography>
         <Typography>{message.message}</Typography>
-        <Typography>{message.date}</Typography>
+        <Typography>{new Date(message.date).toLocaleString()}</Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={closeModal} variant = "contained" color="primary">

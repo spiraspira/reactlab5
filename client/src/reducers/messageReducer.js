@@ -14,14 +14,14 @@ const messageReducer = (state = initialState, action) => {
       return {
         ...state,
         messages: state.messages.map(message =>
-          message.id === action.payload.id ? action.payload : message
+          message.Id === action.payload.Id ? action.payload : message
         )
       };
     case 'DELETE_MESSAGE':
       return {
         ...state,
         messages: state.messages.filter(message =>
-          message.id != action.payload.id
+          message.Id != action.payload.Id
         )
       };
     case 'SORT_MESSAGES_BY_DATE_ASC':
