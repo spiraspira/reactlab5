@@ -1,114 +1,62 @@
-const fs = require('fs');
-const path = require('path');
+const { Property } = require('../models/models');
 
 // GET controller for retrieving property data
-const getProperties = (req, res) => {
-  const filePath = path.join(__dirname, '..', 'data', 'properties.json');
-
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const properties = JSON.parse(data);
+const getProperties = async (req, res) => {
+  try {
+    const properties = await Property.findAll();
     res.json(properties);
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // POST controller for creating a new property
-const createProperty = (req, res) => {
-  const newProperty = req.body;
-
-  const filePath = path.join(__dirname, '..', 'data', 'properties.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const properties = JSON.parse(data);
-
-    if(newProperty == null) {
-        console.log("Entity is null");
-
-        return;
-    }
-
-    properties.push(newProperty);
-
-    fs.writeFile(filePath, JSON.stringify(properties), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
-      }
-
-      res.json(newProperty);
-    });
-  });
+const createProperty = async (req, res) => {
+  try {
+    const newProperty = await Property.create(req.body);
+    res.json(newProperty);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // PUT controller for updating property data
-const updateProperty = (req, res) => {
+const updateProperty = async (req, res) => {
   const propertyId = req.params.id;
   const updatedProperty = req.body;
 
-  const filePath = path.join(__dirname, '..', 'data', 'properties.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const properties = JSON.parse(data);
-
-    const property = properties.find(p => p.id == propertyId);
+  try {
+    const property = await Property.findByPk(propertyId);
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    Object.assign(property, updatedProperty);
-
-    fs.writeFile(filePath, JSON.stringify(properties), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
-      }
-
-      res.json(updatedProperty);
-    });
-  });
+    await property.update(updatedProperty);
+    res.json(updatedProperty);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // DELETE controller for deleting a property
-const deleteProperty = (req, res) => {
+const deleteProperty = async (req, res) => {
   const propertyId = req.params.id;
 
-  const filePath = path.join(__dirname, '..', 'data', 'properties.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const properties = JSON.parse(data);
-
-    const propertyIndex = properties.findIndex(p => p.id == propertyId);
-    if (propertyIndex === -1) {
+  try {
+    const property = await Property.findByPk(propertyId);
+    if (!property) {
       return res.status(404).json({ error: 'Property not found' });
     }
 
-    properties.splice(propertyIndex, 1);
-
-    fs.writeFile(filePath, JSON.stringify(properties), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
-      }
-
-      res.json({ id: propertyId });
-    });
-  });
+    await property.destroy();
+    res.json({ id: propertyId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 module.exports = {

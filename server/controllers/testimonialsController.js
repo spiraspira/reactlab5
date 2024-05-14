@@ -1,113 +1,62 @@
-const fs = require('fs');
-const path = require('path');
+const { Testimonial } = require('../models/models');
 
 // GET controller for retrieving testimonial data
-const getTestimonials = (req, res) => {
-  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
-
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const testimonials = JSON.parse(data);
+const getTestimonials = async (req, res) => {
+  try {
+    const testimonials = await Testimonial.findAll();
     res.json(testimonials);
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // POST controller for creating a new testimonial
-const createTestimonial = (req, res) => {
-  const newTestimonial = req.body;
-    if(newTestimonial == null) {
-        console.log("Entity is null");
-
-        return;
-    }
-
-  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const testimonials = JSON.parse(data);
-
-    testimonials.push(newTestimonial);
-
-    fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
-      }
-
-      res.json(newTestimonial);
-    });
-  });
+const createTestimonial = async (req, res) => {
+  try {
+    const newTestimonial = await Testimonial.create(req.body);
+    res.json(newTestimonial);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // PUT controller for updating testimonial data
-const updateTestimonial = (req, res) => {
+const updateTestimonial = async (req, res) => {
   const testimonialId = req.params.id;
   const updatedTestimonial = req.body;
 
-  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const testimonials = JSON.parse(data);
-
-    const testimonial = testimonials.find(t => t.id == testimonialId);
+  try {
+    const testimonial = await Testimonial.findByPk(testimonialId);
     if (!testimonial) {
       return res.status(404).json({ error: 'Testimonial not found' });
     }
 
-    Object.assign(testimonial, updatedTestimonial);
-
-    fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
-      }
-
-      res.json(updatedTestimonial);
-    });
-  });
+    await testimonial.update(updatedTestimonial);
+    res.json(updatedTestimonial);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 // DELETE controller for deleting a testimonial
-const deleteTestimonial = (req, res) => {
+const deleteTestimonial = async (req, res) => {
   const testimonialId = req.params.id;
 
-  const filePath = path.join(__dirname, '..', 'data', 'testimonials.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Server error' });
-    }
-
-    const testimonials = JSON.parse(data);
-
-    const testimonialIndex = testimonials.findIndex(t => t.id == testimonialId);
-    if (testimonialIndex === -1) {
+  try {
+    const testimonial = await Testimonial.findByPk(testimonialId);
+    if (!testimonial) {
       return res.status(404).json({ error: 'Testimonial not found' });
     }
 
-    testimonials.splice(testimonialIndex, 1);
-
-    fs.writeFile(filePath, JSON.stringify(testimonials), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Server error' });
-      }
-
-      res.json({id: testimonialId});
-    });
-  });
+    await testimonial.destroy();
+    res.json({ id: testimonialId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 
 module.exports = {

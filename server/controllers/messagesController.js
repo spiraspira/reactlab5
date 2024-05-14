@@ -1,135 +1,69 @@
-const fs = require('fs');
-const path = require('path');
+const { Message } = require('../models/models');
 
 // GET-контроллер для получения данных Messages
-const getMessages = (req, res) => {
-  // Путь к файлу с данными Messages
-  const filePath = path.join(__dirname, '..', 'data', 'messages.json');
-
-  // Чтение файла с данными Messages
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
-
-    // Преобразование данных в формат JSON и отправка клиенту
-    const messages = JSON.parse(data);
+const getMessages = async (req, res) => {
+  try {
+    const messages = await Message.findAll();
     res.json(messages);
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
 };
 
 // POST-контроллер для создания нового сообщения
-const createMessage = (req, res) => {
-  const newMessage = req.body; // Данные для создания нового сообщения
-
-  // Чтение файла с данными Messages
-  const filePath = path.join(__dirname, '..', 'data', 'messages.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
-
-    // Преобразование данных в формат JSON
-    const messages = JSON.parse(data);
-
-    if(newMessage == null) {
-        console.log("Entity is null");
-
-        return;
-    }
-
-    // Добавление нового сообщения
-    messages.push(newMessage);
-
-    // Запись обновленных данных в файл
-    fs.writeFile(filePath, JSON.stringify(messages), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Ошибка сервера' });
-      }
-
-      res.json(newMessage);
+const createMessage = async (req, res) => {
+  try {
+    const { id, name, email, message, attachments } = req.body;
+    const newMessage = await Message.create({
+      id,
+      name,
+      email,
+      message,
+      attachments
     });
-  });
+    res.json(newMessage);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
 };
 
 // PUT-контроллер для обновления данных сообщения
-const updateMessage = (req, res) => {
+const updateMessage = async (req, res) => {
   const messageId = req.params.id;
-  const updatedMessage = req.body; // Данные для обновления сообщения
+  const updatedMessage = req.body;
 
-  // Путь к файлу с данными Messages
-  const filePath = path.join(__dirname, '..', 'data', 'messages.json');
-
-  // Чтение файла с данными Messages
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
-
-    // Преобразование данных в формат JSON
-    const messages = JSON.parse(data);
-
-    // Поиск сообщения по идентификатору
-    const message = messages.find(m => m.id == messageId);
+  try {
+    const message = await Message.findByPk(messageId);
     if (!message) {
       return res.status(404).json({ error: 'Сообщение не найдено' });
     }
 
-    // Обновление данных сообщения
-    message.text = updatedMessage.text;
-
-    // Запись обновленных данных в файл
-    fs.writeFile(filePath, JSON.stringify(messages), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Ошибка сервера' });
-      }
-
-      res.json(updatedMessage);
-    });
-  });
+    await message.update(updatedMessage);
+    res.json(message);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
 };
 
 // DELETE-контроллер для удаления сообщения
-const deleteMessage = (req, res) => {
+const deleteMessage = async (req, res) => {
   const messageId = req.params.id;
 
-  // Путь к файлу с данными Messages
-  const filePath = path.join(__dirname, '..', 'data', 'messages.json');
-
-  // Чтение файла с данными Messages
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Ошибка сервера' });
-    }
-
-    // Преобразование данных в формат JSON
-    const messages = JSON.parse(data);
-
-    // Поиск сообщения по идентификатору
-    const messageIndex = messages.findIndex(m => m.id == messageId);
-    if (messageIndex === -1) {
+  try {
+    const message = await Message.findByPk(messageId);
+    if (!message) {
       return res.status(404).json({ error: 'Сообщение не найдено' });
     }
 
-    // Удаление сообщения из массива
-    messages.splice(messageIndex, 1);
-
-    // Запись обновленных данных в файл
-    fs.writeFile(filePath, JSON.stringify(messages), 'utf8', err => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Ошибка сервера' });
-      }
-
-      res.json({ id: messageId });
-    });
-  });
+    await message.destroy();
+    res.json({ id: messageId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
 };
 
 module.exports = {
