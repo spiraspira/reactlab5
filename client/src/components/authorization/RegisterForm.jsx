@@ -9,19 +9,24 @@ const RegisterForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
+    if (!login || !password) {
+      alert('Login and password fields cannot be empty');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:5000/users', { login, password });
-  
+
       alert('success');
       window.location.href = '/login';
     } catch (error) {
       console.error(error);
-  
+
       if (error.response && error.response.status === 500) {
         alert(error.response.data.message);
       } else {
-
+        // Handle other errors
       }
     }
   };
