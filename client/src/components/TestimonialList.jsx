@@ -23,6 +23,7 @@ const TestimonialList = ({
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const userRole = localStorage.getItem("role"); // Get user role from localStorage
 
   useEffect(() => {
     fetchTestimonials();
@@ -83,9 +84,15 @@ const TestimonialList = ({
         {testimonials.testimonials.map((testimonial) => (
           <ListItem key={testimonial.Id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={testimonial.name + " " + new Date(testimonial.date).toLocaleString()} />
-            <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
-            <Button onClick={() => handleDeleteTestimonial(testimonial)}>Delete</Button>
-            <Button onClick={() => handleEditClick(testimonial)}>Edit</Button>
+            {userRole === "admin" ? (
+              <>
+                <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
+                <Button onClick={() => handleDeleteTestimonial(testimonial)}>Delete</Button>
+                <Button onClick={() => handleEditClick(testimonial)}>Edit</Button>
+              </>
+            ) : (
+              <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
+            )}
           </ListItem>
         ))}
       </List>
@@ -99,8 +106,10 @@ const TestimonialList = ({
           updateTestimonial={handleUpdateTestimonial}
         />
       )}
-      <Typography variant="h2">Новый отзыв</Typography>
-      <TestimonialForm addTestimonial={handleAddTestimonial} />
+        <>
+          <Typography variant="h2">Новый отзыв</Typography>
+          <TestimonialForm addTestimonial={handleAddTestimonial} />
+        </>
     </section>
   );
 };

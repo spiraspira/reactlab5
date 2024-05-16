@@ -23,6 +23,7 @@ const PropertyList = ({
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const userRole = localStorage.getItem("role"); // Get user role from localStorage
 
   useEffect(() => {
     fetchProperties();
@@ -84,15 +85,19 @@ const PropertyList = ({
         {properties.properties.map((property) => (
           <ListItem key={property.Id} style={{ marginBottom: "10px" }}>
             <ListItemText primary={property.name} />
+            {userRole === "admin" && (
+              <Button variant="outlined" onClick={() => handleDeleteProperty(property)}>
+                Удалить
+              </Button>
+            )}
             <Button variant="outlined" onClick={() => handlePropertyClick(property)}>
               Просмотр
             </Button>
-            <Button variant="outlined" onClick={() => handleDeleteProperty(property)}>
-              Удалить
-            </Button>
-            <Button variant="outlined" onClick={() => handleEditClick(property)}>
-              Редактировать
-            </Button>
+            {userRole === "admin" && (
+              <Button variant="outlined" onClick={() => handleEditClick(property)}>
+                Редактировать
+              </Button>
+            )}
           </ListItem>
         ))}
       </List>
@@ -104,8 +109,12 @@ const PropertyList = ({
           updateProperty={handleUpdateProperty}
         />
       )}
-      <Typography variant="h2">Добавить новый объект недвижимости</Typography>
-      <PropertyForm addProperty={handleAddProperty} />
+      {userRole === "admin" && (
+        <>
+          <Typography variant="h2">Добавить новый объект недвижимости</Typography>
+          <PropertyForm addProperty={handleAddProperty} />
+        </>
+      )}
     </section>
   );
 };
