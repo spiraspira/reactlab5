@@ -82,8 +82,34 @@ const Testimonial = sequelize.define('Testimonial', {
 },
 { timestamps: false });
 
+const User = sequelize.define('User', {
+    Id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    login: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  },
+  { timestamps: false });
+
 module.exports = {
   Property,
   Message,
-  Testimonial
+  Testimonial,
+  User
 };
