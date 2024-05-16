@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState('');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
-      const response = await axios.post('YOUR_REGISTER_API_ENDPOINT', { email, password });
-      // Handle successful registration
-      console.log(response.data);
+      const response = await axios.post('http://localhost:5000/users', { login, password });
+  
+      alert('success');
+      window.location.href = '/login';
     } catch (error) {
-      // Handle registration error
       console.error(error);
+  
+      if (error.response && error.response.status === 500) {
+        alert(error.response.data.message);
+      } else {
+
+      }
     }
   };
 
@@ -26,10 +33,10 @@ const RegisterForm = () => {
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          type="email"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          label="Login"
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
           fullWidth
           margin="normal"
         />
@@ -43,6 +50,16 @@ const RegisterForm = () => {
         />
         <Button variant="contained" color="primary" type="submit" fullWidth>
           Register
+        </Button>
+        <Button
+          variant="outlined"
+          component={Link}
+          to="/login"
+          color="primary"
+          fullWidth
+          style={{ marginTop: '1rem' }}
+        >
+          Login
         </Button>
       </form>
     </Container>

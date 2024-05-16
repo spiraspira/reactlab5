@@ -4,14 +4,14 @@ import { TextField, Button, Typography, Container } from '@material-ui/core';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('YOUR_LOGIN_API_ENDPOINT', { email, password });
+      const response = await axios.post('YOUR_LOGIN_API_ENDPOINT', { email: login, password });
       // Handle successful login
       console.log(response.data);
     } catch (error) {
@@ -27,10 +27,10 @@ const LoginForm = () => {
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
-          type="email"
-          label="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="test"
+          label="Login"
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
           fullWidth
           margin="normal"
         />
