@@ -1,6 +1,14 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Link, makeStyles, Button } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Link,
+  makeStyles,
+  Button,
+} from "@material-ui/core";
 import { Link as RouterLink } from "react-router-dom";
+import ChangePasswordForm from "./authorization/ChangePasswordForm";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -14,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   const handleLogout = () => {
     // Remove token and role from local and session storage
@@ -23,6 +38,14 @@ const Header = () => {
     sessionStorage.removeItem("role");
     // Navigate to "/login"
     window.location.href = "/login";
+  };
+
+  const handleOpenChangePassword = () => {
+    setChangePasswordOpen(true);
+  };
+
+  const handleCloseChangePassword = () => {
+    setChangePasswordOpen(false);
   };
 
   return (
@@ -41,11 +64,22 @@ const Header = () => {
           <Link component={RouterLink} to="/messages" className={classes.headerLink}>
             Обратная связь
           </Link>
-          <Button color="inherit" onClick={handleLogout}>
-            Log Out
-          </Button>
+          {isLoggedIn && (
+            <>
+              <Button color="inherit" onClick={handleOpenChangePassword}>
+                Change Password
+              </Button>
+              <Button color="inherit" onClick={handleLogout}>
+                Log Out
+              </Button>
+            </>
+          )}
         </nav>
       </Toolbar>
+      <ChangePasswordForm
+        open={changePasswordOpen}
+        handleClose={handleCloseChangePassword}
+      />
     </AppBar>
   );
 };

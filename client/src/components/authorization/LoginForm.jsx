@@ -14,12 +14,14 @@ const LoginForm = () => {
       const response = await axios.post('http://localhost:5000/users/login', { login, password });
   
       // Handle successful login
-      const { token, isAdmin } = response.data;
+      const { token, isAdmin, userId } = response.data;
   
       localStorage.setItem('token', token);
       sessionStorage.setItem('token', token);
       localStorage.setItem('role', isAdmin ? "admin" : "user");
       sessionStorage.setItem('role', isAdmin ? "admin" : "user");
+      localStorage.setItem('userId', userId);
+      sessionStorage.setItem('userId', userId);
   
       alert('success');
       window.location.href = '/';

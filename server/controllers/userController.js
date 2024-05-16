@@ -41,9 +41,34 @@ exports.loginUser = async (req, res) => {
     console.log(process.env.SECRET_KEY);
     const token = jwt.sign({ userId: user.id }, "a6bj7dkvh43kge");
 
-    res.json({ token, isAdmin: user.isAdmin });
+    res.json({ token, isAdmin: user.isAdmin, userId: user.Id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.updateUser = async (req, res) => {
+    const { userId, password } = req.body;
+  
+    try {
+      // Find the user in the database
+      const user = await User.findByPk(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      // Hash the new password
+      const hashedNewPassword = await bcrypt.hash(password, 10);
+  
+      // Update the user's password
+      user.password = hashedNewPassword;
+      await user.save();
+  
+      res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: error.message });
+    }
+  };
