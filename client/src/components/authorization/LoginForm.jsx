@@ -9,14 +9,24 @@ const LoginForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
-      const response = await axios.post('YOUR_LOGIN_API_ENDPOINT', { email: login, password });
+      const response = await axios.post('http://localhost:5000/users/login', { login, password });
+  
       // Handle successful login
-      console.log(response.data);
+      const { token, isAdmin } = response.data;
+  
+      localStorage.setItem('token', token);
+      sessionStorage.setItem('token', token);
+      localStorage.setItem('role', isAdmin ? "admin" : "user");
+      sessionStorage.setItem('role', isAdmin ? "admin" : "user");
+  
+      alert('success');
+      window.location.href = '/';
     } catch (error) {
-      // Handle login error
       console.error(error);
+  
+      alert(error.response.data.message);
     }
   };
 

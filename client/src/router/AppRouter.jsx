@@ -22,7 +22,7 @@ const AppRouter = () => {
         window.addEventListener("storage", handleStorageChange);
     }, [navigate]);
 
-    if ((token && localStorage.getItem("is") === "user") || (tokenSession && sessionStorage.getItem("role") === "user")) {
+    if (token || tokenSession) {
         return (
             <Routes>
             <Route path="/" element={<Properties />} />
