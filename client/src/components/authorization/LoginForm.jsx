@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
 
-const Register = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -10,11 +10,11 @@ const Register = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('YOUR_REGISTER_API_ENDPOINT', { email, password });
-      // Handle successful registration
+      const response = await axios.post('YOUR_LOGIN_API_ENDPOINT', { email, password });
+      // Handle successful login
       console.log(response.data);
     } catch (error) {
-      // Handle registration error
+      // Handle login error
       console.error(error);
     }
   };
@@ -22,7 +22,7 @@ const Register = () => {
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" component="h2" align="center" gutterBottom>
-        Register
+        Login
       </Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -42,11 +42,11 @@ const Register = () => {
           margin="normal"
         />
         <Button variant="contained" color="primary" type="submit" fullWidth>
-          Register
+          Login
         </Button>
       </form>
     </Container>
   );
 };
 
-export default Register;
+export default LoginForm;
