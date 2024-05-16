@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -43,6 +44,16 @@ const LoginForm = () => {
         />
         <Button variant="contained" color="primary" type="submit" fullWidth>
           Login
+        </Button>
+        <Button
+          variant="outlined"
+          component={Link}
+          to="/register"
+          color="primary"
+          fullWidth
+          style={{ marginTop: '1rem' }}
+        >
+          Register
         </Button>
       </form>
     </Container>
