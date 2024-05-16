@@ -13,11 +13,13 @@ app.use(express.json())
 const messagesRouter = require('./routes/messages');
 const testimonialsRouter = require('./routes/testimonials');
 const propertiesRouter = require('./routes/properties');
+const usersRouter = require('./routes/users');
 
 // Использование маршрутов
 app.use('/messages', messagesRouter);
 app.use('/testimonials', testimonialsRouter);
 app.use('/properties', propertiesRouter);
+app.use('/users', usersRouter);
 
 const start = async () => {
     try {
