@@ -67,29 +67,7 @@ const PropertyList = ({
     sortPropertiesByNameAsc();
   };
 
-  const handleSaveExcel = () => {
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Properties");
 
-    // Добавляем заголовки столбцов
-    worksheet.addRow(["Название", "Описание"]);
-
-    // Добавляем данные по каждому объекту недвижимости
-    properties.properties.forEach((property) => {
-      worksheet.addRow([property.name, property.description, property.price]);
-    });
-
-    // Генерируем файл Excel
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "properties.xlsx";
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-  };
 
   const handleSaveJson = () => {
     const json = JSON.stringify(properties);
@@ -125,6 +103,30 @@ const PropertyList = ({
     // Генерируем файл PDF
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
     pdfDocGenerator.download("properties.pdf");
+  };
+
+  const handleSaveExcel = () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Properties");
+
+    // Добавляем заголовки столбцов
+    worksheet.addRow(["Название", "Описание"]);
+
+    // Добавляем данные по каждому объекту недвижимости
+    properties.properties.forEach((property) => {
+      worksheet.addRow([property.name, property.description]);
+    });
+
+    // Генерируем файл Excel
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "properties.xlsx";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
   };
 
   return (
