@@ -12,6 +12,12 @@ import {
   fetchMessages
 } from "../actions/messageActions";
 
+// Добавляем библиотеку для генерации файлов
+import ExcelJS from "exceljs";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 const MessageList = ({
   messages,
   addMessage,
@@ -61,7 +67,7 @@ const MessageList = ({
     sortMessagesByDateAsc();
   };
 
-  const handleDownloadJson = () => {
+  const handleSaveJson = () => {
     const json = JSON.stringify(messages.messages, null, 2);
     const element = document.createElement("a");
     const file = new Blob([json], { type: "application/json" });
@@ -72,11 +78,68 @@ const MessageList = ({
     document.body.removeChild(element);
   };
 
+  const handleSavePdf = () => {
+    const docDefinition = {
+      content: [
+        { text: "Сообщения", style: "header" },
+        { text: " " },
+        messages.messages.map((message) => new Date(message.date).toLocaleString() + " " + message.email + " " + message.name + ": " + message.message)
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true
+        },
+        subheader: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 15, 0, 0]
+        }
+      }
+    };
+
+    // Генерируем файл PDF
+    const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+    pdfDocGenerator.download("messages.pdf");
+  };
+
+  const handleSaveExcel = () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Properties");
+
+    // Добавляем заголовки столбцов
+    worksheet.addRow(["Дата", "Почта", "Имя", "Сообщение"]);
+
+    // Добавляем данные по каждому объекту недвижимости
+    messages.messages.forEach((message) => {
+      worksheet.addRow([new Date(message.date).toLocaleString(), message.email, message.name, message.message]);
+    });
+
+    // Генерируем файл Excel
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "messages.xlsx";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  };
+
   return (
     <section className="message-list">
       <Typography variant="h2">Сообщения</Typography>
       <Button onClick={handleSortMessagesByDate}>Сортировать по дате</Button>
-      <Button onClick={handleDownloadJson}>Скачать JSON</Button>
+      <Button variant="outlined" onClick={handleSaveJson}>
+        Скачать JSON
+      </Button>
+      <Button variant="outlined" onClick={handleSaveExcel}>
+        Скачать Excel
+      </Button>
+      <Button variant="outlined" onClick={handleSavePdf}>
+        Скачать PDF
+      </Button>
       <List style={{ margin: 0, padding: 0 }}>
         {messages.messages.map((message) => (
           <ListItem key={message.Id} style={{ marginBottom: "10px" }}>
