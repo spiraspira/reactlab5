@@ -7,6 +7,7 @@ const MessageForm = ({ addMessage }) => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -19,14 +20,25 @@ const MessageForm = ({ addMessage }) => {
         break;
       case "email":
         setEmail(value);
+        setEmailError("");
         break;
       default:
         break;
     }
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!validateEmail(email)) {
+      setEmailError("Invalid email address");
+      return;
+    }
 
     // Create a new message object
     const newMessage = {
@@ -65,6 +77,8 @@ const MessageForm = ({ addMessage }) => {
           name="email"
           value={email}
           onChange={handleInputChange}
+          error={Boolean(emailError)}
+          helperText={emailError}
           required
         />
       </div>

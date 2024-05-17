@@ -14,6 +14,7 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
   const [name, setName] = useState(message.name);
   const [email, setEmail] = useState(message.email);
   const [messageText, setMessageText] = useState(message.message);
+  const [emailError, setEmailError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,6 +24,7 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
         break;
       case "email":
         setEmail(value);
+        setEmailError("");
         break;
       case "message":
         setMessageText(value);
@@ -32,8 +34,18 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
     }
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!validateEmail(email)) {
+      setEmailError("Invalid email address");
+      return;
+    }
 
     const updatedMessage = {
       ...message,
@@ -66,6 +78,8 @@ const MessageEdit = ({ message, closeModal, updateMessage }) => {
             name="email"
             value={email}
             onChange={handleChange}
+            error={Boolean(emailError)}
+            helperText={emailError}
             fullWidth
             margin="normal"
           />
