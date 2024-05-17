@@ -1,4 +1,5 @@
 const { Property } = require('../models/models');
+const jwt = require('jsonwebtoken');
 
 // GET controller for retrieving property data
 const getProperties = async (req, res) => {

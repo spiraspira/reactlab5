@@ -25,7 +25,7 @@ const createMessage = async (req, res) => {
     res.json(newMessage);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Ошибка сервера' });
+    res.status(500).json({ error: error.message });
   }
 };
 

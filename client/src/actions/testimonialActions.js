@@ -48,7 +48,7 @@ export const addTestimonial = (testimonial) => {
 export const updateTestimonial = (testimonial) => {
   return async (dispatch) => {
     try {
-      const response = await axiosInstance.put(`http://localhost:5000/testimonials/${testimonial.id}`, testimonial);
+      const response = await axiosInstance.put(`http://localhost:5000/testimonials/${testimonial.Id}`, testimonial);
       dispatch({
         type: UPDATE_TESTIMONIAL,
         payload: response.data
@@ -62,7 +62,7 @@ export const updateTestimonial = (testimonial) => {
 export const deleteTestimonial = (testimonial) => {
   return async (dispatch) => {
     try {
-      const response = await axiosInstance.delete(`http://localhost:5000/testimonials/${testimonial.id}`);
+      const response = await axiosInstance.delete(`http://localhost:5000/testimonials/${testimonial.Id}`);
 
       dispatch({
         type: DELETE_TESTIMONIAL,

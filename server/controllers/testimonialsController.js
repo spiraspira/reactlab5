@@ -1,4 +1,5 @@
 const { Testimonial } = require('../models/models');
+const jwt = require('jsonwebtoken');
 
 // GET controller for retrieving testimonial data
 const getTestimonials = async (req, res) => {

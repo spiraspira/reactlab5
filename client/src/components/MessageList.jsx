@@ -144,7 +144,7 @@ const MessageList = ({
         {messages.messages.map((message) => (
           <ListItem key={message.Id} style={{ marginBottom: "10px" }}>
             <ListItemText
-              primary={message.name + new Date(message.date).toLocaleString()}
+              primary={message.name + " " + new Date(message.date).toLocaleString()}
             />
             <Button onClick={() => handleMessageClick(message)}>Просмотр</Button>
             {userRole !== "user" && (
