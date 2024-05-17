@@ -1,5 +1,27 @@
 import axios from 'axios';
 
+// Create an axios instance with default headers
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:5000',
+    headers: {
+      // Add other default headers if needed
+    },
+  });
+  
+  // Add an interceptor to set the Authorization header with the token
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = token;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
 // Action types
 export const ADD_PROPERTY = 'ADD_PROPERTY';
 export const UPDATE_PROPERTY = 'UPDATE_PROPERTY';
@@ -12,7 +34,7 @@ export const FETCH_PROPERTIES_FAILURE = 'FETCH_PROPERTIES_FAILURE';
 export const addProperty = (property) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('http://localhost:5000/properties', property);
+      const response = await axiosInstance.post('http://localhost:5000/properties', property);
       dispatch({
         type: ADD_PROPERTY,
         payload: response.data
@@ -26,7 +48,7 @@ export const addProperty = (property) => {
 export const updateProperty = (property) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put(`http://localhost:5000/properties/${property.Id}`, property);
+      const response = await axiosInstance.put(`http://localhost:5000/properties/${property.Id}`, property);
       dispatch({
         type: UPDATE_PROPERTY,
         payload: response.data
@@ -40,7 +62,7 @@ export const updateProperty = (property) => {
 export const deleteProperty = (property) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/properties/${property.Id}`);
+      const response = await axiosInstance.delete(`http://localhost:5000/properties/${property.Id}`);
       dispatch({
         type: DELETE_PROPERTY,
         payload: response.data
@@ -58,7 +80,7 @@ export const sortPropertiesByNameAsc = () => ({
 export const fetchProperties = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get('http://localhost:5000/properties');
+      const response = await axiosInstance.get('http://localhost:5000/properties');
       dispatch({
         type: FETCH_PROPERTIES_SUCCESS,
         payload: response.data

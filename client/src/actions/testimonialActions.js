@@ -1,5 +1,27 @@
 import axios from 'axios';
 
+// Create an axios instance with default headers
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:5000',
+    headers: {
+      // Add other default headers if needed
+    },
+  });
+  
+  // Add an interceptor to set the Authorization header with the token
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers.Authorization = token;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
 // Action types
 export const ADD_TESTIMONIAL = 'ADD_TESTIMONIAL';
 export const UPDATE_TESTIMONIAL = 'UPDATE_TESTIMONIAL';
@@ -12,7 +34,7 @@ export const FETCH_TESTIMONIALS_FAILURE = 'FETCH_TESTIMONIALS_FAILURE';
 export const addTestimonial = (testimonial) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post('http://localhost:5000/testimonials', testimonial);
+      const response = await axiosInstance.post('http://localhost:5000/testimonials', testimonial);
       dispatch({
         type: ADD_TESTIMONIAL,
         payload: response.data
@@ -26,7 +48,7 @@ export const addTestimonial = (testimonial) => {
 export const updateTestimonial = (testimonial) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put(`http://localhost:5000/testimonials/${testimonial.id}`, testimonial);
+      const response = await axiosInstance.put(`http://localhost:5000/testimonials/${testimonial.id}`, testimonial);
       dispatch({
         type: UPDATE_TESTIMONIAL,
         payload: response.data
@@ -40,7 +62,7 @@ export const updateTestimonial = (testimonial) => {
 export const deleteTestimonial = (testimonial) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/testimonials/${testimonial.id}`);
+      const response = await axiosInstance.delete(`http://localhost:5000/testimonials/${testimonial.id}`);
 
       dispatch({
         type: DELETE_TESTIMONIAL,
@@ -59,7 +81,7 @@ export const sortTestimonialsByDateAsc = () => ({
 export const fetchTestimonials = () => {
   return async (dispatch) => {
     try {
-      const response = await axios.get('http://localhost:5000/testimonials');
+      const response = await axiosInstance.get('http://localhost:5000/testimonials');
       dispatch({
         type: FETCH_TESTIMONIALS_SUCCESS,
         payload: response.data

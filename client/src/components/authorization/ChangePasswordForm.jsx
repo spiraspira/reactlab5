@@ -22,7 +22,19 @@ const ChangePasswordForm = ({ open, handleClose }) => {
 
     try {
       // Make API request to update password
-      await axios.put(`http://localhost:5000/users`, { userId, password });
+      const token = localStorage.getItem("token");
+
+      // Make API request to update password with the token in the Authorization header
+      await axios.put(
+        "http://localhost:5000/users",
+        { userId, password },
+        {
+          headers: {
+            Authorization: token
+          }
+        }
+      );
+  
 
       alert("Password changed successfully");
       handleClose();
