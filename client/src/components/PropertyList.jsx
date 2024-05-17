@@ -12,6 +12,12 @@ import {
   fetchProperties
 } from "../actions/propertyActions";
 
+// Добавляем библиотеку для генерации файлов
+import ExcelJS from "exceljs";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 const PropertyList = ({
   properties,
   addProperty,
@@ -23,7 +29,7 @@ const PropertyList = ({
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const userRole = localStorage.getItem("role"); // Get user role from localStorage
+  const userRole = localStorage.getItem("role"); // Получаем роль пользователя из localStorage
 
   useEffect(() => {
     fetchProperties();
@@ -61,6 +67,30 @@ const PropertyList = ({
     sortPropertiesByNameAsc();
   };
 
+  const handleSaveExcel = () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Properties");
+
+    // Добавляем заголовки столбцов
+    worksheet.addRow(["Название", "Описание"]);
+
+    // Добавляем данные по каждому объекту недвижимости
+    properties.properties.forEach((property) => {
+      worksheet.addRow([property.name, property.description, property.price]);
+    });
+
+    // Генерируем файл Excel
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "properties.xlsx";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  };
+
   const handleSaveJson = () => {
     const json = JSON.stringify(properties);
     const blob = new Blob([json], { type: "application/json" });
@@ -72,6 +102,31 @@ const PropertyList = ({
     URL.revokeObjectURL(url);
   };
 
+  const handleSavePdf = () => {
+    const docDefinition = {
+      content: [
+        { text: "Доступные объекты недвижимости", style: "header" },
+        { text: " " },
+        properties.properties.map((property) => property.name + ": " + property.description)
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true
+        },
+        subheader: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 15, 0, 0]
+        }
+      }
+    };
+
+    // Генерируем файл PDF
+    const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+    pdfDocGenerator.download("properties.pdf");
+  };
+
   return (
     <section className="property-list">
       <Typography variant="h2">Доступные объекты недвижимости</Typography>
@@ -79,8 +134,15 @@ const PropertyList = ({
         Сортировать по названию (по возрастанию)
       </Button>
       <Button variant="outlined" onClick={handleSaveJson}>
-        Сохранить JSON
+        Скачать JSON
       </Button>
+      <Button variant="outlined" onClick={handleSaveExcel}>
+        Скачать Excel
+      </Button>
+      <Button variant="outlined" onClick={handleSavePdf}>
+        Скачать PDF
+      </Button>
+      {/* Добавьте кнопку для сохранения файла PDF */}
       <List>
         {properties.properties.map((property) => (
           <ListItem key={property.Id} style={{ marginBottom: "10px" }}>
