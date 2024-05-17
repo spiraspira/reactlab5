@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterForm = () => {
   const [login, setLogin] = useState('');
@@ -11,20 +13,20 @@ const RegisterForm = () => {
     event.preventDefault();
 
     if (!login || !password) {
-      alert('Login and password fields cannot be empty');
+      toast.error("Login and password fields cannot be empty");
       return;
     }
 
     try {
       const response = await axios.post('http://localhost:5000/users', { login, password });
 
-      alert('success');
+      toast.success("Registration successful");
       window.location.href = '/login';
     } catch (error) {
       console.error(error);
 
       if (error.response && error.response.status === 500) {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
         // Handle other errors
       }
@@ -67,6 +69,7 @@ const RegisterForm = () => {
           Login
         </Button>
       </form>
+      <ToastContainer />
     </Container>
   );
 };

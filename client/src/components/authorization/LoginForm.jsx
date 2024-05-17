@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Container } from '@material-ui/core';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
   const [login, setLogin] = useState('');
@@ -23,12 +25,12 @@ const LoginForm = () => {
       localStorage.setItem('userId', userId);
       sessionStorage.setItem('userId', userId);
   
-      alert('success');
+      toast.success("Login successful");
       window.location.href = '/';
     } catch (error) {
       console.error(error);
   
-      alert(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -68,6 +70,7 @@ const LoginForm = () => {
           Register
         </Button>
       </form>
+      <ToastContainer />
     </Container>
   );
 };

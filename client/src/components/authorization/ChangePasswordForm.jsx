@@ -8,13 +8,15 @@ import {
   Button,
 } from "@material-ui/core";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangePasswordForm = ({ open, handleClose }) => {
   const [password, setPassword] = useState("");
 
   const handleChangePassword = async () => {
     if (!password) {
-      alert("Password field cannot be empty");
+      toast.error("Password field cannot be empty");
       return;
     }
 
@@ -34,14 +36,13 @@ const ChangePasswordForm = ({ open, handleClose }) => {
           }
         }
       );
-  
 
-      alert("Password changed successfully");
+      toast.success("Password changed successfully");
       handleClose();
     } catch (error) {
       console.error(error);
 
-      alert(error.response.data.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -66,6 +67,7 @@ const ChangePasswordForm = ({ open, handleClose }) => {
           Change
         </Button>
       </DialogActions>
+      <ToastContainer />
     </Dialog>
   );
 };
