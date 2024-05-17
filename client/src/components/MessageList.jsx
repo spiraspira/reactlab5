@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Typography, List, ListItem, ListItemText, Button } from "@material-ui/core";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.css';
 import MessageInfo from "./MessageInfo";
 import MessageForm from "./MessageForm";
 import MessageEdit from "./MessageEdit";
@@ -60,7 +62,20 @@ const MessageList = ({
   };
 
   const handleDeleteMessage = (message) => {
-    deleteMessage(message);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteMessage(message);
+        Swal.fire("Deleted!", "The message has been deleted.", "success");
+      }
+    });
   };
 
   const handleSortMessagesByDate = () => {

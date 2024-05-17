@@ -12,7 +12,9 @@ import {
   fetchTestimonials
 } from "../actions/testimonialActions";
 
-// Добавляем библиотеку для генерации файлов
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.css';
+
 import ExcelJS from "exceljs";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -60,7 +62,18 @@ const TestimonialList = ({
   };
 
   const handleDeleteTestimonial = (testimonial) => {
-    deleteTestimonial(testimonial);
+    Swal.fire({
+      title: 'Confirmation',
+      text: 'Are you sure you want to delete this testimonial?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTestimonial(testimonial);
+      }
+    });
   };
 
   const handleSortTestimonialsByDateAsc = () => {
@@ -97,7 +110,6 @@ const TestimonialList = ({
       }
     };
 
-    // Генерируем файл PDF
     const pdfDocGenerator = pdfMake.createPdf(docDefinition);
     pdfDocGenerator.download("testimonials.pdf");
   };
@@ -106,15 +118,12 @@ const TestimonialList = ({
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Properties");
 
-    // Добавляем заголовки столбцов
     worksheet.addRow(["Дата", "Автор", "Отзыв"]);
 
-    // Добавляем данные по каждому объекту недвижимости
     testimonials.testimonials.forEach((testimonial) => {
       worksheet.addRow([new Date(testimonial.date).toLocaleString(), testimonial.name, testimonial.testimonial]);
     });
 
-    // Генерируем файл Excel
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       const url = URL.createObjectURL(blob);
@@ -133,32 +142,40 @@ const TestimonialList = ({
         Sort by Date (Ascending)
       </Button>
       <Button variant="outlined" onClick={handleSaveJson}>
-        Скачать JSON
-      </Button>
-      <Button variant="outlined" onClick={handleSaveExcel}>
-        Скачать Excel
+        Save as JSON
       </Button>
       <Button variant="outlined" onClick={handleSavePdf}>
-        Скачать PDF
+        Save as PDF
       </Button>
-      <List style={{ margin: 0, padding: 0 }}>
+      <Button variant="outlined" onClick={handleSaveExcel}>
+        Save as Excel
+      </Button>
+      <List>
         {testimonials.testimonials.map((testimonial) => (
-          <ListItem key={testimonial.Id} style={{ marginBottom: "10px" }}>
-            <ListItemText primary={testimonial.name + " " + new Date(testimonial.date).toLocaleString()} />
-            {userRole === "admin" ? (
+          <ListItem key={testimonial.id}>
+            <ListItemText
+              primary={testimonial.name}
+              secondary={new Date(testimonial.date).toLocaleString()}
+              onClick={() => handleTestimonialClick(testimonial)}
+            />
+            {userRole === "admin" && (
               <>
-                <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
-                <Button onClick={() => handleDeleteTestimonial(testimonial)}>Delete</Button>
-                <Button onClick={() => handleEditClick(testimonial)}>Edit</Button>
+                <Button color="primary" onClick={() => handleEditClick(testimonial)}>
+                  Edit
+                </Button>
+                <Button color="secondary" onClick={() => handleDeleteTestimonial(testimonial)}>
+                  Delete
+                </Button>
               </>
-            ) : (
-              <Button onClick={() => handleTestimonialClick(testimonial)}>View</Button>
             )}
           </ListItem>
         ))}
       </List>
       {isModalOpen && (
-        <TestimonialInfo testimonial={selectedTestimonial} closeModal={closeModal} />
+        <TestimonialInfo
+          testimonial={selectedTestimonial}
+          closeModal={closeModal}
+        />
       )}
       {isEditModalOpen && (
         <TestimonialEdit
@@ -167,10 +184,9 @@ const TestimonialList = ({
           updateTestimonial={handleUpdateTestimonial}
         />
       )}
-        <>
-          <Typography variant="h2">Новый отзыв</Typography>
-          <TestimonialForm addTestimonial={handleAddTestimonial} />
-        </>
+      {userRole === "admin" && (
+        <TestimonialForm addTestimonial={handleAddTestimonial} />
+      )}
     </section>
   );
 };
