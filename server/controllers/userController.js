@@ -38,8 +38,8 @@ exports.loginUser = async (req, res) => {
     }
 
     // Generate JWT token
-    console.log(process.env.SECRET_KEY);
-    const token = jwt.sign({ userId: user.id }, "a6bj7dkvh43kge");
+    const token = jwt.sign({ isAdmin: user.isAdmin, userId: user.Id }, "a6bj7dkvh43kge");
+    
 
     res.json({ token, isAdmin: user.isAdmin, userId: user.Id });
   } catch (error) {
@@ -52,6 +52,18 @@ exports.updateUser = async (req, res) => {
     const { userId, password } = req.body;
   
     try {
+        const token = req.headers.authorization; // Get the token from the request headers
+        if (typeof token === 'undefined') {
+          return res.status(401).json({ error: 'Unauthorized' });
+        }
+  
+        const decodedToken = jwt.verify(token, "a6bj7dkvh43kge"); // Verify and decode the token
+    
+        // Check if the token is valid and contains the necessary information
+        if (!decodedToken || decodedToken.userId != userId) {
+          return res.status(401).json({ error: 'Unauthorized' });
+        }
+
       // Find the user in the database
       const user = await User.findByPk(userId);
   

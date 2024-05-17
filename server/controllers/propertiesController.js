@@ -14,6 +14,18 @@ const getProperties = async (req, res) => {
 // POST controller for creating a new property
 const createProperty = async (req, res) => {
   try {
+    const token = req.headers.authorization; // Get the token from the request headers
+    if (typeof token === 'undefined') {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const decodedToken = jwt.verify(token, "a6bj7dkvh43kge"); // Verify and decode the token
+
+    // Check if the token is valid and contains the necessary information
+    if (!decodedToken || !decodedToken.isAdmin) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const { name, description } = req.body;
     const newProperty = await Property.create({
       name,
@@ -32,6 +44,18 @@ const updateProperty = async (req, res) => {
   const updatedProperty = req.body;
 
   try {
+    const token = req.headers.authorization; // Get the token from the request headers
+    if (typeof token === 'undefined') {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const decodedToken = jwt.verify(token, "a6bj7dkvh43kge"); // Verify and decode the token
+
+    // Check if the token is valid and contains the necessary information
+    if (!decodedToken || !decodedToken.isAdmin) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const property = await Property.findByPk(propertyId);
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
@@ -50,6 +74,18 @@ const deleteProperty = async (req, res) => {
   const propertyId = req.params.id;
 
   try {
+    const token = req.headers.authorization; // Get the token from the request headers
+    if (typeof token === 'undefined') {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const decodedToken = jwt.verify(token, "a6bj7dkvh43kge"); // Verify and decode the token
+
+    // Check if the token is valid and contains the necessary information
+    if (!decodedToken || !decodedToken.isAdmin) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
     const property = await Property.findByPk(propertyId);
     if (!property) {
       return res.status(404).json({ error: 'Property not found' });
